@@ -7,7 +7,7 @@ public class InitializeDB {
     public InitializeDB(String url, String username, String password) {
         try{
             this.connection = DriverManager.getConnection(url,username,password);
-            System.out.println("Connected to sql server...");
+            System.out.println("Connected to sql server!");
         } catch (SQLException ex){
             System.out.println("Something went wrong in connecting to sql server:");
             System.out.println(ex.getMessage());
