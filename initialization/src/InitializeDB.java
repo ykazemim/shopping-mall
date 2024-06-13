@@ -51,6 +51,8 @@ public class InitializeDB {
                           `idclient` INT NOT NULL AUTO_INCREMENT,
                           `address` VARCHAR(45) NULL,
                           `credit` FLOAT NULL,
+                          `user` INT NOT NULL,
+                          FOREIGN KEY (`user`) REFERENCES user(`iduser`) ON DELETE CASCADE,
                           PRIMARY KEY (`idclient`));
                         """);
 
