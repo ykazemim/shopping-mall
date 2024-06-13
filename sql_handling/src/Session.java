@@ -21,7 +21,7 @@ public class Session {
             String st = "SELECT * FROM user WHERE username=? && password=?";
             PreparedStatement preparedStatement = connection.prepareStatement(st);
             preparedStatement.setString(1,username);
-            preparedStatement.setString(2,password);
+            preparedStatement.setString(2,hashedPassword);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
