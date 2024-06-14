@@ -3,8 +3,15 @@ import java.awt.*;
 
 public class Main {
     private static JFrame frame;
+    private static final String username = "root";
+    private static final String password = "molioo1298";
+    private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
 
     public static void main(String[] args) {
+
+        // Create a connection to sql server
+        new Initialize(dbURL,username, password);
+
         frame = new JFrame("Shopping Mall");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(1, 1));

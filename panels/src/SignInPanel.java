@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import SQLDefinedClasses.Session;
+import SQLDefinedClasses.Validator;
 
 public class SignInPanel extends JPanel implements ActionListener {
 
@@ -19,7 +22,7 @@ public class SignInPanel extends JPanel implements ActionListener {
         introLabel = new JLabel("Please enter your username and password");
         usernameLabel = new JLabel("Username");
         passwordLabel = new JLabel("Password");
-        errorsLabel = new JTextArea("Put an error here\nPut an error here\n");
+        errorsLabel = new JTextArea();
         signInButton = new JButton("Sign in");
         signUpButton = new JButton("Sign up");
         usernameTextField = new JTextField();
@@ -96,6 +99,25 @@ public class SignInPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if (src.equals(signInButton)) {
+            // Get the inputs
+            String username = usernameTextField.getText();
+            String password = String.valueOf(passwordTextField.getPassword());
+
+            ArrayList<String> errors = Validator.validateSignInForm(username, password);
+
+            if(errors.isEmpty()){
+                try {
+                    Initialize.setSession(new Session(Initialize.connection,username,password));
+                    System.out.println(Initialize.session.getName());
+                } catch (Exception ex){
+                    errorsLabel.setText(ex.getMessage());
+                }
+            } else {
+                errorsLabel.setText("");
+                for(String error : errors){
+                    errorsLabel.setText(errorsLabel.getText() + "\n" + error);
+                }
+            }
             errorsLabel.setVisible(true);
             Main.refreshFrame();
         } else if (src.equals(signUpButton)) {
