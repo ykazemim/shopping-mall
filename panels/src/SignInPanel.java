@@ -109,6 +109,7 @@ public class SignInPanel extends JPanel implements ActionListener {
                 try {
                     Initialize.setSession(new Session(Initialize.connection,username,password));
                     System.out.println(Initialize.session.getName());
+                    errorsLabel.setText("");
                 } catch (Exception ex){
                     errorsLabel.setText(ex.getMessage());
                 }
