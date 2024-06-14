@@ -11,8 +11,11 @@ public class Main {
         frame.setResizable(false);
 
 
-        SignInPanel signInPanel = new SignInPanel();
-        frame.add(signInPanel);
+//        SignInPanel signInPanel = new SignInPanel();
+//        frame.add(signInPanel);
+
+        AddProductPanel addProductPanel = new AddProductPanel();
+        frame.add(addProductPanel);
 
         refreshFrame();
         frame.setLocationRelativeTo(null);
