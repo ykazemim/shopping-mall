@@ -10,17 +10,14 @@ public class Validator {
 
     public static ArrayList<String> validateSignInForm(String username, String password) {
         ArrayList<String> errors = new ArrayList<>();
-        if (username.length() < 4){
-            errors.add("Short username");
-        }
 
         Matcher usernameMatcher = usernamePattern.matcher(username);
-        if (!usernameMatcher.matches())
-            errors.add("Username should only contains alphabetic characters, digits, underscores and dashes");
+        if (!usernameMatcher.matches() || username.length() < 4)
+            errors.add("Username should at least contain 4 characters and only contain alphabetic characters, digits, underscores and dashes");
 
         Matcher passwordMatcher = passwordPattern.matcher(password);
         if(!passwordMatcher.matches())
-            errors.add("Invalid password");
+            errors.add("Password's length should be at least 8\nPassword should contains at least one uppercase letter, one lowercase letter, one digit and one special characters");
 
         return errors;
     }
@@ -30,19 +27,15 @@ public class Validator {
 
         Matcher nameMatcher = namePattern.matcher(name);
         if (!nameMatcher.matches())
-            errors.add("Invalid name");
-
-        if (username.length() < 4){
-            errors.add("Short username");
-        }
+            errors.add("Name should only contain alphabetic characters and white spaces");
 
         Matcher usernameMatcher = usernamePattern.matcher(username);
-        if (!usernameMatcher.matches())
-            errors.add("Username should only contains alphabetic characters, digits, underscores and dashes");
+        if (!usernameMatcher.matches() || username.length() < 4)
+            errors.add("Username should at least contain 4 characters and only contain alphabetic characters, digits, underscores and dashes");
 
         Matcher passwordMatcher = passwordPattern.matcher(password);
         if(!passwordMatcher.matches())
-            errors.add("Invalid password");
+            errors.add("Password's length should be at least 8\nPassword should contains at least one uppercase letter, one lowercase letter, one digit and one special characters");
 
         Matcher phoneMatcher = phonePattern.matcher(phone);
         if (phone.length() != 11 || !phoneMatcher.matches()) {
