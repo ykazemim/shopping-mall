@@ -1,3 +1,4 @@
+import SQLDefinedClasses.ProductHandler;
 import SQLDefinedClasses.Validator;
 
 import javax.imageio.ImageIO;
@@ -9,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -32,7 +35,10 @@ public class AddProductPanel extends JPanel implements ActionListener {
     private final JTextField stockTextField;
     private final JCheckBox availableToClientCheckBox;
     private final JFileChooser imageFileChooser;
-    private final String filePath = ".\\";
+
+    // Set default path to Pictures according to the OS
+    private final String filePath = System.getProperty("os.name").toLowerCase().contains("windows") ? String.valueOf(Paths.get(System.getProperty("user.home") ,"Pictures").toAbsolutePath()) : "~/Pictures";
+
     private File file;
     private ImageIcon imageIcon;
 
@@ -198,7 +204,13 @@ public class AddProductPanel extends JPanel implements ActionListener {
             ArrayList<String> errors = Validator.validateAddProductForm(title, price, stock, pathToImage);
 
             if (errors.isEmpty()){
-                // TODO : Add product to database
+                if (file != null){
+                    pathToImage = FileCopier.copy(pathToImage);
+                    System.out.println("Image copied");
+                }
+
+                // Add product to the database
+                ProductHandler.addProduct(Initialize.connection, title, Float.parseFloat(price), availableToClient, pathToImage, Integer.parseInt(stock));
                 errorsLabel.setText("");
             } else {
                 errorsLabel.setText("");
