@@ -1,7 +1,12 @@
+import SQLDefinedClasses.Session;
+import SQLDefinedClasses.User;
+import SQLDefinedClasses.Validator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class SignUpPanel extends JPanel implements ActionListener {
 
@@ -28,7 +33,7 @@ public class SignUpPanel extends JPanel implements ActionListener {
         passwordLabel = new JLabel("Password");
         phoneLabel = new JLabel("Phone");
         addressLabel = new JLabel("Address");
-        errorsLabel = new JTextArea("Put an error here\nPut an error here\n");
+        errorsLabel = new JTextArea();
         signUpButton = new JButton("Sign up");
         backButton = new JButton("Back");
         fullnameTextField = new JTextField();
@@ -144,6 +149,31 @@ public class SignUpPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src.equals(signUpButton)) {
+
+            // Get the inputs
+            String username = usernameTextField.getText();
+            String password = String.valueOf(passwordTextField.getPassword());
+            String name = fullnameTextField.getText();
+            String phone = phoneTextField.getText();
+            String address = addressTextField.getText();
+
+            ArrayList<String> errors = Validator.validateSingUpForm(name,username, password,phone, address);
+
+            if(errors.isEmpty()){
+                try {
+                    User newUser = new User(Initialize.connection, name, username, password, phone, address);
+                    Initialize.setSession(newUser.getSession());
+                    errorsLabel.setText("");
+                } catch (Exception ex){
+                    errorsLabel.setText(ex.getMessage());
+                }
+            } else {
+                errorsLabel.setText("");
+                for(String error : errors){
+                    errorsLabel.setText(errorsLabel.getText() + "\n" + error);
+                }
+            }
+
             errorsLabel.setVisible(true);
             Main.refreshFrame();
         } else if (src.equals(backButton)) {

@@ -9,6 +9,14 @@ public class User {
 
         String hashedPassword = PasswordHasher.hashPassword(password);
         try{
+            // Check if the username is already taken
+            String checkUsernameStatement = "SELECT * FROM User WHERE username = ?;";
+            PreparedStatement checkUsernamePreparedStatement = connection.prepareStatement(checkUsernameStatement);
+            checkUsernamePreparedStatement.setString(1,username);
+            ResultSet resultSet = checkUsernamePreparedStatement.executeQuery();
+            if(resultSet.next())
+                throw new Exception("Username is already taken");
+
             // Insert into User table
             String userStatement = "INSERT INTO User (username, password, name, phone, user_type) values (?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(userStatement, Statement.RETURN_GENERATED_KEYS);
