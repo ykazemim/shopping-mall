@@ -38,7 +38,7 @@ public class InitializeDB {
                           `idproduct` INT NOT NULL AUTO_INCREMENT,
                           `title` VARCHAR(45) NOT NULL,
                           `price` FLOAT NOT NULL,
-                          `image` VARCHAR(45) NULL,
+                          `image` NVARCHAR(260) NULL DEFAULT NULL,
                           `stock` INT NULL,
                           `rating_count` INT NULL,
                           `average_rating` FLOAT NULL,
