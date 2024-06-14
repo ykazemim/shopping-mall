@@ -1,3 +1,5 @@
+import SQLDefinedClasses.Validator;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -7,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class AddProductPanel extends JPanel implements ActionListener {
@@ -41,7 +44,7 @@ public class AddProductPanel extends JPanel implements ActionListener {
         stockLabel = new JLabel("Stock");
         imageLabel = new JLabel("Image");
         imagePathLabel = new JTextArea();
-        errorsLabel = new JTextArea("Put an error here\nPut an error here\n");
+        errorsLabel = new JTextArea();
         addButton = new JButton("Add");
         backButton = new JButton("Back");
         chooseImageButton = new JButton("Choose image");
@@ -186,6 +189,24 @@ public class AddProductPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src.equals(addButton)) {
+            String title = titleTextField.getText();
+            String price = priceTextField.getText();
+            String stock = stockTextField.getText();
+            String pathToImage = file == null ? null : file.getAbsolutePath();
+            boolean availableToClient = availableToClientCheckBox.isSelected();
+
+            ArrayList<String> errors = Validator.validateAddProductForm(title, price, stock, pathToImage);
+
+            if (errors.isEmpty()){
+                // TODO : Add product to database
+                errorsLabel.setText("");
+            } else {
+                errorsLabel.setText("");
+                for(String error : errors){
+                    errorsLabel.setText(errorsLabel.getText() + "\n" + error);
+                }
+            }
+
             errorsLabel.setVisible(true);
             Main.refreshFrame();
         } else if (src.equals(backButton)) {

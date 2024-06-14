@@ -1,7 +1,10 @@
 package SQLDefinedClasses;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.File;
 
 public class Validator {
     private final static Pattern passwordPattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
@@ -49,5 +52,45 @@ public class Validator {
 
         return errors;
     }
+
+    public static ArrayList<String> validateAddProductForm(String title, String price, String stock,String pathToImage) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        Matcher nameMatcher = namePattern.matcher(title);
+        if (!nameMatcher.matches())
+            errors.add("Name should only contain alphabetic characters and white spaces");
+
+        try {
+            float priceFloat = Float.parseFloat(price);
+            if (priceFloat < 0)
+                errors.add("Price should be a positive number");
+        } catch (NumberFormatException e) {
+            errors.add("Price should be a number");
+        }
+
+        try {
+            int quantityInt = Integer.parseInt(stock);
+            if (quantityInt < 0)
+                errors.add("Stock should be a positive number");
+        } catch (NumberFormatException e) {
+            errors.add("Stock should be a number");
+        }
+
+        if (pathToImage != null) {
+            // Validate if selected path file is actually an image
+            File file = new File(pathToImage);
+            if (!file.exists() || !file.isFile()) {
+                errors.add("Please select an image file");
+            } else {
+                try {
+                    BufferedImage image = ImageIO.read(file);
+                } catch (Exception e) {
+                    errors.add("Please select an image file");
+                }
+            }
+        }
+        return errors;
+    }
+
 
 }
