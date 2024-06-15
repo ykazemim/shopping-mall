@@ -41,13 +41,23 @@ public class User {
 
             // Insert into Client table using the retrieved user ID
             String clientStatement = "INSERT INTO Client (address, credit, user) values (?, ?, ?);";
-            preparedStatement = connection.prepareStatement(clientStatement);
+            preparedStatement = connection.prepareStatement(clientStatement, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1,address);
             preparedStatement.setFloat(2,0f);
             preparedStatement.setInt(3, idUser);
 
             preparedStatement.executeUpdate();
+
+            // Retrieve the last inserted client ID
+            generatedKeys = preparedStatement.getGeneratedKeys();
+            idUser = -1;
+            if(generatedKeys.next()){
+                idUser = generatedKeys.getInt(1);
+            }
+
+            if(idUser == -1)
+                throw new Exception("Something went wrong in getting client id");
 
             // Fetch a basket for the client and create one if it doesn't exist
             Basket basket = BasketHandler.fetchBasketFromClient(connection, idUser,false);

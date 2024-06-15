@@ -20,7 +20,7 @@ public class BasketHandler {
 
             // Set the total of the basket
             float total = basket.getTotal() + product.getPrice();
-            String basketStatement = "UPDATE basket SET total = ? WHERE idbasket = ?;";
+            String basketStatement = "UPDATE basket SET total_price = ? WHERE idbasket = ?;";
             preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setFloat(1, total);
             preparedStatement.setInt(2, basket.getIdBasket());
@@ -39,7 +39,7 @@ public class BasketHandler {
     public static void removeProductFromBasket(Connection connection, Product product, Basket basket){
         // Remove product from the basket
         try {
-            String basketProductStatement = "DELETE FROM basket_product WHERE basket = ? AND product = ?;";
+            String basketProductStatement = "DELETE FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketProductStatement);
             preparedStatement.setInt(1, basket.getIdBasket());
             preparedStatement.setInt(2, product.getIdProduct());
@@ -47,7 +47,7 @@ public class BasketHandler {
 
             // Set the new total
             float total = basket.getTotal() - product.getPrice();
-            String basketStatement = "UPDATE basket SET total = ? WHERE idbasket = ?;";
+            String basketStatement = "UPDATE basket SET total_price = ? WHERE idbasket = ?;";
             preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setFloat(1, total);
             preparedStatement.setInt(2, basket.getIdBasket());
@@ -89,7 +89,10 @@ public class BasketHandler {
             preparedStatement.setInt(1, idBasket);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-                return new Basket(resultSet.getInt("id"), resultSet.getInt("client"), resultSet.getDate("date").toLocalDate(), resultSet.getFloat("total"), resultSet.getBoolean("is_proceeded"));
+                if (resultSet.getDate("date_proceeded") == null)
+                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
+                else
+                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
             }
         } catch (java.sql.SQLException e){
             System.out.println("Something went wrong in fetching basket from the database");
@@ -107,7 +110,10 @@ public class BasketHandler {
             preparedStatement.setBoolean(2, isProceeded);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-                return new Basket(resultSet.getInt("id"), resultSet.getInt("client"), resultSet.getDate("date").toLocalDate(), resultSet.getFloat("total"), resultSet.getBoolean("is_proceeded"));
+                if (resultSet.getDate("date_proceeded") == null)
+                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
+                else
+                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
             } else {
                 return null;
             }
@@ -121,10 +127,10 @@ public class BasketHandler {
     public static Basket createBasket(Connection connection, int client) throws Exception{
         // Create a basket
         try{
-            String basketStatement = "INSERT INTO basket (client, date, total, is_proceeded) VALUES (?, ?, ?, ?);";
+            String basketStatement = "INSERT INTO basket (client, date_proceeded, total_price, is_proceeded) VALUES (?, ?, ?, ?);";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, client);
-            preparedStatement.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            preparedStatement.setDate(2, null);
             preparedStatement.setFloat(3, 0f);
             preparedStatement.setBoolean(4, false);
             preparedStatement.executeUpdate();
