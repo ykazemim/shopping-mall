@@ -176,6 +176,7 @@ public class SignUpPanel extends JPanel implements ActionListener {
 
             errorsLabel.setVisible(true);
             Main.refreshFrame();
+            Main.refreshFrame();
         } else if (src.equals(backButton)) {
             Main.changePanel(new SignInPanel());
         }
