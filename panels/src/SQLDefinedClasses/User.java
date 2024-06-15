@@ -1,4 +1,6 @@
 package SQLDefinedClasses;
+import DataTypeClasses.Basket;
+
 import java.sql.*;
 
 public class User {
@@ -46,6 +48,11 @@ public class User {
             preparedStatement.setInt(3, idUser);
 
             preparedStatement.executeUpdate();
+
+            // Fetch a basket for the client and create one if it doesn't exist
+            Basket basket = BasketHandler.fetchBasketFromClient(connection, idUser,false);
+            if(basket == null)
+                 BasketHandler.createBasket(connection, idUser);
 
             // Set the session
             newSession = new Session(connection, username, password);

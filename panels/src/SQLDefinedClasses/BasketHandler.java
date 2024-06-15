@@ -20,7 +20,7 @@ public class BasketHandler {
 
             // Set the total of the basket
             float total = basket.getTotal() + product.getPrice();
-            String basketStatement = "UPDATE basket SET total = ? WHERE id = ?;";
+            String basketStatement = "UPDATE basket SET total = ? WHERE idbasket = ?;";
             preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setFloat(1, total);
             preparedStatement.setInt(2, basket.getIdBasket());
@@ -47,7 +47,7 @@ public class BasketHandler {
 
             // Set the new total
             float total = basket.getTotal() - product.getPrice();
-            String basketStatement = "UPDATE basket SET total = ? WHERE id = ?;";
+            String basketStatement = "UPDATE basket SET total = ? WHERE idbasket = ?;";
             preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setFloat(1, total);
             preparedStatement.setInt(2, basket.getIdBasket());
@@ -65,7 +65,7 @@ public class BasketHandler {
     public static void checkout(Connection connection, Basket basket) throws Exception {
         // Checkout the basket
         try {
-            String basketStatement = "UPDATE basket SET is_proceeded = ? date_proceeded = ? WHERE id = ?;";
+            String basketStatement = "UPDATE basket SET is_proceeded = ? date_proceeded = ? WHERE idbasket = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setBoolean(1, true);
             preparedStatement.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
@@ -84,7 +84,7 @@ public class BasketHandler {
     public static Basket fetchBasketFromId(Connection connection, int idBasket) {
         // Fetch the basket
         try{
-            String basketStatement = "SELECT * FROM basket WHERE id = ?;";
+            String basketStatement = "SELECT * FROM basket WHERE idbasket = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setInt(1, idBasket);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
@@ -98,17 +98,18 @@ public class BasketHandler {
         return null;
     }
 
-    public static Basket fetchBasketFromClient(Connection connection, int client) {
-        // Fetch the basket with the client and proceeded
-        // This method is used to create a history of the baskets
+    public static Basket fetchBasketFromClient(Connection connection, int client, boolean isProceeded) {
+        // Fetch the basket with the client ID
         try{
             String basketStatement = "SELECT * FROM basket WHERE client = ? AND is_proceeded = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setInt(1, client);
-            preparedStatement.setBoolean(2, true);
+            preparedStatement.setBoolean(2, isProceeded);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 return new Basket(resultSet.getInt("id"), resultSet.getInt("client"), resultSet.getDate("date").toLocalDate(), resultSet.getFloat("total"), resultSet.getBoolean("is_proceeded"));
+            } else {
+                return null;
             }
         } catch (java.sql.SQLException e){
             System.out.println("Something went wrong in fetching basket from the database");
