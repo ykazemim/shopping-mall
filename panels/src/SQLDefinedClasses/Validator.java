@@ -21,7 +21,7 @@ public class Validator {
 
         Matcher passwordMatcher = passwordPattern.matcher(password);
         if(!passwordMatcher.matches())
-            errors.add("Password's length should be at least 8\nPassword should contains at least one uppercase letter, one lowercase letter, one digit and one special characters");
+            errors.add("Password's length should be at least 8 and it should contains at least one uppercase letter, one lowercase letter, one digit and one special characters");
 
         return errors;
     }
@@ -39,7 +39,7 @@ public class Validator {
 
         Matcher passwordMatcher = passwordPattern.matcher(password);
         if(!passwordMatcher.matches())
-            errors.add("Password's length should be at least 8\nPassword should contains at least one uppercase letter, one lowercase letter, one digit and one special characters");
+            errors.add("Password's length should be at least 8 and it should contains at least one uppercase letter, one lowercase letter, one digit and one special characters");
 
         Matcher phoneMatcher = phonePattern.matcher(phone);
         if (phone.length() != 11 || !phoneMatcher.matches()) {

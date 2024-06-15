@@ -165,16 +165,17 @@ public class SignUpPanel extends JPanel implements ActionListener {
                     Initialize.setSession(newUser.getSession());
                     errorsLabel.setText("");
                 } catch (Exception ex){
-                    errorsLabel.setText(ex.getMessage());
+                    errorsLabel.setText("* " + ex.getMessage());
                 }
             } else {
                 errorsLabel.setText("");
                 for(String error : errors){
-                    errorsLabel.setText(errorsLabel.getText() + "\n" + error);
+                    errorsLabel.setText(errorsLabel.getText() + "\n* " + error);
                 }
             }
 
             errorsLabel.setVisible(true);
+            Main.refreshFrame();
             Main.refreshFrame();
         } else if (src.equals(backButton)) {
             Main.changePanel(new SignInPanel());
