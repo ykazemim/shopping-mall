@@ -1,4 +1,6 @@
 package SQLDefinedClasses;
+import DataTypeClasses.Basket;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,6 +52,15 @@ public class Session {
                     this.idclient = rs.getInt(1);
                     this.clientAddress = rs.getString(2);
                     this.clientCredit = rs.getFloat(3);
+
+                    // Fetch a basket for the client and create one if it doesn't exist
+                    Basket basket = BasketHandler.fetchBasketFromClient(connection, idclient,false);
+                    if(basket == null)
+                        basket = BasketHandler.createBasket(connection, idclient);
+                    System.out.println(basket.getClient());
+
+                    // TODO : Return basket object
+
 
                 } else {
                     this.isAdmin = true;
