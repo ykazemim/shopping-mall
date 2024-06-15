@@ -61,9 +61,9 @@ public class InitializeDB {
                         CREATE TABLE `mall`.`basket` (
                           `idbasket` INT NOT NULL AUTO_INCREMENT,
                           `client` INT NOT NULL,
-                          `date_proceded` DATETIME NULL,
+                          `date_proceeded` DATETIME NULL,
                           `total_price` FLOAT NULL,
-                          `is_proceded` BOOLEAN NULL,
+                          `is_proceeded` BOOLEAN NULL,
                           PRIMARY KEY (`idbasket`),
                           FOREIGN KEY (`client`) REFERENCES client(`idclient`) ON DELETE CASCADE,
                           UNIQUE INDEX `idbasket_UNIQUE` (`idbasket` ASC) VISIBLE);""");
