@@ -148,7 +148,7 @@ public class Product {
         }
 
         // This panel contains product's details
-        JPanel detailsPanel = new JPanel(new GridLayout(4, 3));
+        JPanel detailsPanel = new JPanel(new GridLayout(5, 3));
 
         JLabel tempLabel = new JLabel("test");
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
@@ -158,6 +158,7 @@ public class Product {
         JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>" + this.stock + "</html>");
         JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>" + this.availableForClient + "</html>");
         JButton rateButton = new JButton("Rate");
+
 
         detailsPanel.add(titleLabel);
         detailsPanel.add(priceLabel);
@@ -189,9 +190,18 @@ public class Product {
             }
         });
 
+        // Every user can rate a particular product only once
+        if(this.clientRating!=0){
+            rateButton.setEnabled(false);
+            ratingSlider.setValue(this.clientRating);
+            ratingSlider.setEnabled(false);
+        }
+
         detailsPanel.add(ratingSlider);
 
-        detailsPanel.add(rateButton);
+        JPanel rateButtonPanel = new JPanel();
+        rateButtonPanel.add(rateButton);
+        detailsPanel.add(rateButtonPanel);
 
         return bigPanel;
     }
