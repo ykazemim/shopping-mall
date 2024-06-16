@@ -72,11 +72,27 @@ public class User {
     public static ArrayList<Client> fetchAllClients(Connection connection) {
         ArrayList<Client> clients = new ArrayList<>();
         try{
+            // Fetch all clients from the database
             String clientStatement = "SELECT * FROM Client;";
             PreparedStatement preparedStatement = connection.prepareStatement(clientStatement);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                clients.add(new Client(resultSet.getInt("idclient"), resultSet.getInt("user"), resultSet.getString("address"), resultSet.getFloat("credit")));
+            ResultSet clientResult = preparedStatement.executeQuery();
+
+            while (clientResult.next()){
+                String userStatement = "SELECT * FROM User WHERE iduser = ?;";
+                PreparedStatement userPreparedStatement = connection.prepareStatement(userStatement);
+                userPreparedStatement.setInt(1,clientResult.getInt("user"));
+                ResultSet userResultSet = userPreparedStatement.executeQuery();
+                userResultSet.next();
+                clients.add(new Client(
+                        clientResult.getInt("idclient"),
+                        clientResult.getInt("user"),
+                        clientResult.getString("address"),
+                        clientResult.getFloat("credit"),
+                        userResultSet.getString("name"),
+                        userResultSet.getString("phone"),
+                        userResultSet.getString("username")
+
+                ));
             }
             return clients;
         } catch (SQLException e){
