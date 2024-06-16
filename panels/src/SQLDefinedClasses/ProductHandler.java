@@ -150,4 +150,45 @@ public class ProductHandler {
         return products;
     }
 
+    public static void calculateRating(Connection connection, Session session, Product product, int userRating) {
+        // Calculate rating for a product
+        try {
+            // First insert the rating row to the rating table
+            String insertRatingStatement = "INSERT INTO rating (client, product, rating) values (?, ?, ?);";
+            PreparedStatement insertRatingPreparedStatement = connection.prepareStatement(insertRatingStatement);
+            insertRatingPreparedStatement.setInt(1, session.getIdclient());
+            insertRatingPreparedStatement.setInt(2, product.getIdProduct());
+            insertRatingPreparedStatement.setInt(3, userRating);
+            insertRatingPreparedStatement.executeUpdate();
+
+            // Fetch the product rating count and average rating
+            String fetchRatingStatement = "SELECT * FROM product WHERE idproduct = ?;";
+            PreparedStatement fetchRatingPreparedStatement = connection.prepareStatement(fetchRatingStatement);
+            fetchRatingPreparedStatement.setInt(1, product.getIdProduct());
+            ResultSet fetchRatingResultSet = fetchRatingPreparedStatement.executeQuery();
+            fetchRatingResultSet.next();
+
+            // Calculating the new rating
+            int ratingCount = fetchRatingResultSet.getInt("rating_count");
+            float averageRating = fetchRatingResultSet.getFloat("average_rating");
+
+            float newAverageRating = (averageRating * ratingCount + userRating) / (ratingCount + 1);
+
+            // Update table accordingly
+            String updateRatingStatement = "UPDATE product SET rating_count = ?, average_rating = ? WHERE idproduct = ?;";
+            PreparedStatement updateRatingPreparedStatement = connection.prepareStatement(updateRatingStatement);
+            updateRatingPreparedStatement.setInt(1, ratingCount + 1);
+            updateRatingPreparedStatement.setFloat(2, newAverageRating);
+            updateRatingPreparedStatement.setInt(3, product.getIdProduct());
+            updateRatingPreparedStatement.executeUpdate();
+
+            // Assign updated product to the product
+            product = ProductHandler.fetchProduct(connection, product.getIdProduct(), session);
+
+        } catch (SQLException e){
+            System.out.println("Something went wrong in calculating rating for the product");
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
