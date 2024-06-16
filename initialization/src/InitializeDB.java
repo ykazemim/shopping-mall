@@ -73,6 +73,7 @@ public class InitializeDB {
                         CREATE TABLE `mall`.`product_basket` (
                           `idbasket` INT NOT NULL,
                           `idproduct` INT NOT NULL,
+                          `stock` INT NULL,
                           PRIMARY KEY (`idbasket`, `idproduct`),
                         FOREIGN KEY (`idbasket`) REFERENCES basket(`idbasket`) ON DELETE CASCADE,
                         FOREIGN KEY (`idproduct`) REFERENCES product(`idproduct`) ON DELETE CASCADE
