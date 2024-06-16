@@ -78,6 +78,18 @@ public class InitializeDB {
                         FOREIGN KEY (`idproduct`) REFERENCES product(`idproduct`) ON DELETE CASCADE
                         );""");
 
+                System.out.println("Creating table rating");
+                connection.createStatement().execute("""
+                        CREATE TABLE `mall`.`rating` (
+                          `idrating` INT NOT NULL AUTO_INCREMENT,
+                          `client` INT NOT NULL,
+                          `product` INT NOT NULL,
+                          `rating` FLOAT NULL,
+                          PRIMARY KEY (`idrating`),
+                          FOREIGN KEY (`client`) REFERENCES client(`idclient`) ON DELETE CASCADE,
+                          FOREIGN KEY (`product`) REFERENCES product(`idproduct`) ON DELETE CASCADE););
+                       """);
+                
                 System.out.println("All done!");
 
             } catch (SQLException ex){

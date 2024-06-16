@@ -17,7 +17,7 @@ public class Main {
             password = scanner.nextLine();
         }
         InitializeDB initializeDB = new InitializeDB(url, username, password);
-
+        
         initializeDB.initialize();
     }
 
