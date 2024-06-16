@@ -3,22 +3,40 @@ package SQLDefinedClasses;
 import DataTypeClasses.Basket;
 import DataTypeClasses.Product;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class BasketHandler {
 
     public static void addProductToBasket(Connection connection, Product product, Basket basket){
-        // Add product to the basket
+        // Add or Increment the product in the basket
+
+        // Check if the product is already in the basket
         try {
-            String basketProductStatement = "INSERT INTO basket_product (basket, product) VALUES (?, ?);";
-            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketProductStatement);
+            String fetchStatement = "SELECT * FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(fetchStatement);
             preparedStatement.setInt(1, basket.getIdBasket());
             preparedStatement.setInt(2, product.getIdProduct());
-            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Set the total of the basket
+            if (resultSet.next()){
+                // If the product is already in the basket, increment the stock
+                String incrementStatement = "UPDATE basket_product SET stock = stock + 1 WHERE idbasket = ? AND idproduct = ?;";
+                preparedStatement = connection.prepareStatement(incrementStatement);
+                preparedStatement.setInt(1, basket.getIdBasket());
+                preparedStatement.setInt(2, product.getIdProduct());
+                preparedStatement.executeUpdate();
+            } else {
+                // If the product is not in the basket, add the product to the basket
+                String addStatement = "INSERT INTO basket_product (idbasket, idproduct, stock) VALUES (?, ?, ?);";
+                preparedStatement = connection.prepareStatement(addStatement);
+                preparedStatement.setInt(1, basket.getIdBasket());
+                preparedStatement.setInt(2, product.getIdProduct());
+                preparedStatement.setInt(3, 1);
+                preparedStatement.executeUpdate();
+            }
+
+            // Set the total price of the basket
             float total = basket.getTotal() + product.getPrice();
             String basketStatement = "UPDATE basket SET total_price = ? WHERE idbasket = ?;";
             preparedStatement = connection.prepareStatement(basketStatement);
@@ -29,35 +47,54 @@ public class BasketHandler {
             // Fetch the updated basket
             basket = fetchBasketFromId(connection, basket.getIdBasket());
 
-        } catch (java.sql.SQLException e){
-            System.out.println("Something went wrong in adding product to the basket in the database");
+        } catch (SQLException e) {
+            System.out.println("Something went wrong in fetching product from the basket in the database");
             System.out.println(e.getMessage());
         }
 
     }
 
     public static void removeProductFromBasket(Connection connection, Product product, Basket basket){
-        // Remove product from the basket
+        // Remove or decrement product stock from the basket
+
+        // Check if the product is already in the basket
         try {
-            String basketProductStatement = "DELETE FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
-            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketProductStatement);
+            String fetchStatement = "SELECT * FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(fetchStatement);
             preparedStatement.setInt(1, basket.getIdBasket());
             preparedStatement.setInt(2, product.getIdProduct());
-            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Set the new total
-            float total = basket.getTotal() - product.getPrice();
-            String basketStatement = "UPDATE basket SET total_price = ? WHERE idbasket = ?;";
-            preparedStatement = connection.prepareStatement(basketStatement);
-            preparedStatement.setFloat(1, total);
-            preparedStatement.setInt(2, basket.getIdBasket());
-            preparedStatement.executeUpdate();
+            if (resultSet.next()){
+                // If the product is already in the basket, decrement the stock
+                if (resultSet.getInt("stock") > 1){
+                    String decrementStatement = "UPDATE basket_product SET stock = stock - 1 WHERE idbasket = ? AND idproduct = ?;";
+                    preparedStatement = connection.prepareStatement(decrementStatement);
+                    preparedStatement.setInt(1, basket.getIdBasket());
+                    preparedStatement.setInt(2, product.getIdProduct());
+                    preparedStatement.executeUpdate();
+                } else {
+                    String deleteStatement = "DELETE FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
+                    preparedStatement = connection.prepareStatement(deleteStatement);
+                    preparedStatement.setInt(1, basket.getIdBasket());
+                    preparedStatement.setInt(2, product.getIdProduct());
+                    preparedStatement.executeUpdate();
+                }
 
-            // Fetch the updated basket
-            basket = fetchBasketFromId(connection, basket.getIdBasket());
+                // Set the new total
+                float total = basket.getTotal() - product.getPrice();
+                String basketStatement = "UPDATE basket SET total_price = ? WHERE idbasket = ?;";
+                preparedStatement = connection.prepareStatement(basketStatement);
+                preparedStatement.setFloat(1, total);
+                preparedStatement.setInt(2, basket.getIdBasket());
+                preparedStatement.executeUpdate();
 
-        } catch (java.sql.SQLException e){
-            System.out.println("Something went wrong in removing product from the basket in the database");
+                // Fetch the updated basket
+                basket = fetchBasketFromId(connection, basket.getIdBasket());
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Something went wrong in fetching product from the basket in the database");
             System.out.println(e.getMessage());
         }
     }
@@ -101,22 +138,22 @@ public class BasketHandler {
         return null;
     }
 
-    public static Basket fetchBasketFromClient(Connection connection, int client, boolean isProceeded) {
+    public static ArrayList<Basket> fetchBasketFromClient(Connection connection, int client, boolean isProceeded) {
         // Fetch the basket with the client ID
+        ArrayList<Basket> baskets = new ArrayList<>();
         try{
             String basketStatement = "SELECT * FROM basket WHERE client = ? AND is_proceeded = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setInt(1, client);
             preparedStatement.setBoolean(2, isProceeded);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            while (resultSet.next()){
                 if (resultSet.getDate("date_proceeded") == null)
-                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
+                    baskets.add( new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
                 else
-                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
-            } else {
-                return null;
+                    baskets.add(new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
             }
+            return baskets;
         } catch (java.sql.SQLException e){
             System.out.println("Something went wrong in fetching basket from the database");
             System.out.println(e.getMessage());
@@ -153,4 +190,23 @@ public class BasketHandler {
         }
         return null;
     }
+    
+    public static ArrayList<Product> fetchProductsFromBasket(Connection connection,Basket basket, Session session){
+        try{
+            String sqlStatement = "SELECT * FROM basket_product WHERE idbasket = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1,basket.getIdBasket());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Product> products = new ArrayList<>();
+            while (resultSet.next()){
+                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("product"), session));
+            }
+            return products;
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching products from the basket in the database");
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
 }

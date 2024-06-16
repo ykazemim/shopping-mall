@@ -73,10 +73,23 @@ public class InitializeDB {
                         CREATE TABLE `mall`.`product_basket` (
                           `idbasket` INT NOT NULL,
                           `idproduct` INT NOT NULL,
+                          `stock` INT NULL,
                           PRIMARY KEY (`idbasket`, `idproduct`),
                         FOREIGN KEY (`idbasket`) REFERENCES basket(`idbasket`) ON DELETE CASCADE,
                         FOREIGN KEY (`idproduct`) REFERENCES product(`idproduct`) ON DELETE CASCADE
                         );""");
+
+                System.out.println("Creating table rating");
+                connection.createStatement().execute("""
+                        CREATE TABLE `mall`.`rating` (
+                          `idrating` INT NOT NULL AUTO_INCREMENT,
+                          `client` INT NOT NULL,
+                          `product` INT NOT NULL,
+                          `rating` INT NULL,
+                          PRIMARY KEY (`idrating`),
+                          FOREIGN KEY (`client`) REFERENCES client(`idclient`) ON DELETE CASCADE,
+                          FOREIGN KEY (`product`) REFERENCES product(`idproduct`) ON DELETE CASCADE););
+                       """);
 
                 System.out.println("All done!");
 

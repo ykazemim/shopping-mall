@@ -11,6 +11,7 @@ public class Validator {
     private final static Pattern usernamePattern = Pattern.compile("^[A-Za-z0-9_-]+$");
     private final static Pattern namePattern = Pattern.compile("^[A-Za-z\\s]+$");
     private final static Pattern phonePattern = Pattern.compile("^09\\d*$");
+    private final static int MAX_STOCK = 1000000;
 
     public static ArrayList<String> validateSignInForm(String username, String password) {
         ArrayList<String> errors = new ArrayList<>();
@@ -70,8 +71,8 @@ public class Validator {
 
         try {
             int quantityInt = Integer.parseInt(stock);
-            if (quantityInt < 0)
-                errors.add("Stock should be a positive number");
+            if (quantityInt < 0 || quantityInt > MAX_STOCK)
+                errors.add("Stock should be a positive number and less than 1000000");
         } catch (NumberFormatException e) {
             errors.add("Stock should be a number");
         }

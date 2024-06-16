@@ -1,7 +1,9 @@
 package SQLDefinedClasses;
 import DataTypeClasses.Basket;
+import DataTypeClasses.Client;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class User {
     private Session newSession = null;
@@ -59,17 +61,45 @@ public class User {
             if(idUser == -1)
                 throw new Exception("Something went wrong in getting client id");
 
-            // Fetch a basket for the client and create one if it doesn't exist
-            Basket basket = BasketHandler.fetchBasketFromClient(connection, idUser,false);
-            if(basket == null)
-                 BasketHandler.createBasket(connection, idUser);
-
             // Set the session
             newSession = new Session(connection, username, password);
 
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public static ArrayList<Client> fetchAllClients(Connection connection) {
+        ArrayList<Client> clients = new ArrayList<>();
+        try{
+            // Fetch all clients from the database
+            String clientStatement = "SELECT * FROM Client;";
+            PreparedStatement preparedStatement = connection.prepareStatement(clientStatement);
+            ResultSet clientResult = preparedStatement.executeQuery();
+
+            while (clientResult.next()){
+                String userStatement = "SELECT * FROM User WHERE iduser = ?;";
+                PreparedStatement userPreparedStatement = connection.prepareStatement(userStatement);
+                userPreparedStatement.setInt(1,clientResult.getInt("user"));
+                ResultSet userResultSet = userPreparedStatement.executeQuery();
+                userResultSet.next();
+                clients.add(new Client(
+                        clientResult.getInt("idclient"),
+                        clientResult.getInt("user"),
+                        clientResult.getString("address"),
+                        clientResult.getFloat("credit"),
+                        userResultSet.getString("name"),
+                        userResultSet.getString("phone"),
+                        userResultSet.getString("username")
+
+                ));
+            }
+            return clients;
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching clients from the database");
+            System.out.println(e.getMessage());
+        }
+        return clients;
     }
 
     public Session getSession() {

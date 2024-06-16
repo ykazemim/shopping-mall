@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Session {
     private int iduser;
@@ -16,6 +17,7 @@ public class Session {
     private String clientAddress;
     private float clientCredit;
     private boolean isAdmin;
+    private Basket clientBasket;
 
     public Session(Connection connection,String username, String password) throws Exception{
         String hashedPassword = PasswordHasher.hashPassword(password);
@@ -54,13 +56,15 @@ public class Session {
                     this.clientCredit = rs.getFloat(3);
 
                     // Fetch a basket for the client and create one if it doesn't exist
-                    Basket basket = BasketHandler.fetchBasketFromClient(connection, idclient,false);
-                    if(basket == null)
+                    ArrayList<Basket> baskets = new ArrayList<>();
+                    Basket basket;
+                    baskets = BasketHandler.fetchBasketFromClient(connection, idclient,false);
+                    if( baskets == null || baskets.isEmpty())
                         basket = BasketHandler.createBasket(connection, idclient);
-                    System.out.println(basket.getClient());
+                    else
+                        basket = baskets.get(0);
 
-                    // TODO : Return basket object
-
+                    this.clientBasket = basket;
 
                 } else {
                     this.isAdmin = true;
@@ -103,6 +107,10 @@ public class Session {
         return clientCredit;
     }
 
+    public Basket getClientBasket() {
+        return clientBasket;
+    }
+
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -121,5 +129,9 @@ public class Session {
 
     public void setClientCredit(float clientCredit) {
         this.clientCredit = clientCredit;
+    }
+
+    public void setClientBasket(Basket clientBasket) {
+        this.clientBasket = clientBasket;
     }
 }
