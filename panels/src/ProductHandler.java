@@ -1,7 +1,3 @@
-package SQLDefinedClasses;
-
-import DataTypeClasses.Product;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,7 +28,7 @@ public class ProductHandler {
     public static void updateProduct(Connection connection, int id, String title, float price, boolean availableForClient, String pathToImage, int stock) {
         // Update product in the database
         try {
-            String productStatement = "UPDATE product SET title = ?, price = ?, image = ?, stock = ?, available_for_client = ? WHERE id = ?;";
+            String productStatement = "UPDATE product SET title = ?, price = ?, image = ?, stock = ?, available_for_client = ? WHERE idproduct = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
             preparedStatement.setString(1, title);
             preparedStatement.setFloat(2, price);
@@ -50,7 +46,7 @@ public class ProductHandler {
     public static void deleteProduct(Connection connection, int id) {
         // Delete product from the database
         try {
-            String productStatement = "DELETE FROM product WHERE id = ?;";
+            String productStatement = "DELETE FROM product WHERE idproduct = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
@@ -63,15 +59,16 @@ public class ProductHandler {
     public static Product fetchProduct(Connection connection, int id, Session session) {
         // Fetch a specific product from the database
         try {
-            String productStatement = "SELECT * FROM product WHERE id = ?;";
+            String productStatement = "SELECT * FROM product WHERE idproduct = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
             preparedStatement.setInt(1, id);
             ResultSet productResultSet = preparedStatement.executeQuery();
+            productResultSet.next();
 
             int userRating = 0;
             if (!session.isAdmin()) {
                 // Fetch client rating if exists
-                PreparedStatement prepareStatementRating = connection.prepareStatement("SELECT * FROM rating WHERE user = ? AND product = ?;");
+                PreparedStatement prepareStatementRating = connection.prepareStatement("SELECT * FROM rating WHERE client = ? AND product = ?;");
                 prepareStatementRating.setInt(1, session.getIduser());
                 prepareStatementRating.setInt(2, productResultSet.getInt("idproduct"));
                 ResultSet ratingResultSet = prepareStatementRating.executeQuery();
@@ -83,7 +80,7 @@ public class ProductHandler {
             // Fetch the stock of the product in the user basket if exists
             int userStock = 0;
             if (!session.isAdmin()) {
-                PreparedStatement prepareStatementBasket = connection.prepareStatement("SELECT * FROM basket_product WHERE idproduct = ? AND idbasket = ?;");
+                PreparedStatement prepareStatementBasket = connection.prepareStatement("SELECT * FROM product_basket WHERE idproduct = ? AND idbasket = ?;");
                 prepareStatementBasket.setInt(1, productResultSet.getInt("idproduct"));
                 prepareStatementBasket.setInt(2, session.getClientBasket().getIdBasket());
                 ResultSet basketResultSet = prepareStatementBasket.executeQuery();
@@ -93,7 +90,7 @@ public class ProductHandler {
             }
 
             if (productResultSet.next()) {
-                return new Product(productResultSet.getInt("id"),
+                return new Product(productResultSet.getInt("idproduct"),
                         productResultSet.getString("title"),
                         productResultSet.getFloat("price"),
                         productResultSet.getString("image"),
@@ -136,7 +133,7 @@ public class ProductHandler {
                 int userRating = 0;
                 if (!session.isAdmin()) {
                     // Fetch client rating if exists
-                    PreparedStatement prepareStatementRating = connection.prepareStatement("SELECT * FROM rating WHERE user = ? AND product = ?;");
+                    PreparedStatement prepareStatementRating = connection.prepareStatement("SELECT * FROM rating WHERE client = ? AND product = ?;");
                     prepareStatementRating.setInt(1, session.getIduser());
                     prepareStatementRating.setInt(2, productResultSet.getInt("idproduct"));
                     ResultSet ratingResultSet = prepareStatementRating.executeQuery();
@@ -148,7 +145,7 @@ public class ProductHandler {
                 // Fetch the stock of the product in the user basket if exists
                 int userStock = 0;
                 if (!session.isAdmin()) {
-                    PreparedStatement prepareStatementBasket = connection.prepareStatement("SELECT * FROM basket_product WHERE idproduct = ? AND idbasket = ?;");
+                    PreparedStatement prepareStatementBasket = connection.prepareStatement("SELECT * FROM product_basket WHERE idproduct = ? AND idbasket = ?;");
                     prepareStatementBasket.setInt(1, productResultSet.getInt("idproduct"));
                     prepareStatementBasket.setInt(2, session.getClientBasket().getIdBasket());
                     ResultSet basketResultSet = prepareStatementBasket.executeQuery();
@@ -158,7 +155,7 @@ public class ProductHandler {
                 }
 
                 products.add(new Product(
-                        productResultSet.getInt("id"),
+                        productResultSet.getInt("idproduct"),
                         productResultSet.getString("title"),
                         productResultSet.getFloat("price"),
                         productResultSet.getString("image"),

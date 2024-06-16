@@ -1,8 +1,3 @@
-package SQLDefinedClasses;
-
-import DataTypeClasses.Basket;
-import DataTypeClasses.Product;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -13,7 +8,7 @@ public class BasketHandler {
 
         // Check if the product is already in the basket
         try {
-            String fetchStatement = "SELECT * FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
+            String fetchStatement = "SELECT * FROM product_basket WHERE idbasket = ? AND idproduct = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(fetchStatement);
             preparedStatement.setInt(1, basket.getIdBasket());
             preparedStatement.setInt(2, product.getIdProduct());
@@ -21,14 +16,14 @@ public class BasketHandler {
 
             if (resultSet.next()){
                 // If the product is already in the basket, increment the stock
-                String incrementStatement = "UPDATE basket_product SET stock = stock + 1 WHERE idbasket = ? AND idproduct = ?;";
+                String incrementStatement = "UPDATE product_basket SET stock = stock + 1 WHERE idbasket = ? AND idproduct = ?;";
                 preparedStatement = connection.prepareStatement(incrementStatement);
                 preparedStatement.setInt(1, basket.getIdBasket());
                 preparedStatement.setInt(2, product.getIdProduct());
                 preparedStatement.executeUpdate();
             } else {
                 // If the product is not in the basket, add the product to the basket
-                String addStatement = "INSERT INTO basket_product (idbasket, idproduct, stock) VALUES (?, ?, ?);";
+                String addStatement = "INSERT INTO product_basket (idbasket, idproduct, stock) VALUES (?, ?, ?);";
                 preparedStatement = connection.prepareStatement(addStatement);
                 preparedStatement.setInt(1, basket.getIdBasket());
                 preparedStatement.setInt(2, product.getIdProduct());
@@ -59,7 +54,7 @@ public class BasketHandler {
 
         // Check if the product is already in the basket
         try {
-            String fetchStatement = "SELECT * FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
+            String fetchStatement = "SELECT * FROM product_basket WHERE idbasket = ? AND idproduct = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(fetchStatement);
             preparedStatement.setInt(1, basket.getIdBasket());
             preparedStatement.setInt(2, product.getIdProduct());
@@ -68,13 +63,13 @@ public class BasketHandler {
             if (resultSet.next()){
                 // If the product is already in the basket, decrement the stock
                 if (resultSet.getInt("stock") > 1){
-                    String decrementStatement = "UPDATE basket_product SET stock = stock - 1 WHERE idbasket = ? AND idproduct = ?;";
+                    String decrementStatement = "UPDATE product_basket SET stock = stock - 1 WHERE idbasket = ? AND idproduct = ?;";
                     preparedStatement = connection.prepareStatement(decrementStatement);
                     preparedStatement.setInt(1, basket.getIdBasket());
                     preparedStatement.setInt(2, product.getIdProduct());
                     preparedStatement.executeUpdate();
                 } else {
-                    String deleteStatement = "DELETE FROM basket_product WHERE idbasket = ? AND idproduct = ?;";
+                    String deleteStatement = "DELETE FROM product_basket WHERE idbasket = ? AND idproduct = ?;";
                     preparedStatement = connection.prepareStatement(deleteStatement);
                     preparedStatement.setInt(1, basket.getIdBasket());
                     preparedStatement.setInt(2, product.getIdProduct());
@@ -193,7 +188,7 @@ public class BasketHandler {
     
     public static ArrayList<Product> fetchProductsFromBasket(Connection connection,Basket basket, Session session){
         try{
-            String sqlStatement = "SELECT * FROM basket_product WHERE idbasket = ?;";
+            String sqlStatement = "SELECT * FROM product_basket WHERE idbasket = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
             preparedStatement.setInt(1,basket.getIdBasket());
             ResultSet resultSet = preparedStatement.executeQuery();

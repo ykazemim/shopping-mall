@@ -1,4 +1,3 @@
-package SQLDefinedClasses;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

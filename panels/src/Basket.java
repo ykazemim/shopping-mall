@@ -1,6 +1,3 @@
-package DataTypeClasses;
-
-
 import java.time.LocalDate;
 
 public class Basket {

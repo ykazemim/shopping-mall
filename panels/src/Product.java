@@ -1,9 +1,5 @@
-package DataTypeClasses;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -158,6 +154,8 @@ public class Product {
         JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>" + this.stock + "</html>");
         JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>" + this.availableForClient + "</html>");
         JButton rateButton = new JButton("Rate");
+        JButton addToBasketButton = new JButton("Add to basket");
+        JButton removeFromBasket = new JButton("Remove from basket");
 
 
         detailsPanel.add(titleLabel);
@@ -184,17 +182,25 @@ public class Product {
         ratingSlider.setMajorTickSpacing(1);
         ratingSlider.setPaintLabels(true);
 
-        ratingSlider.addChangeListener(new ChangeListener() {
+        rateButton.addActionListener(new ActionListener() {
             @Override
-            public void stateChanged(ChangeEvent e) {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Rate button clicked");
+                ProductHandler.calculateRating(Initialize.connection, Initialize.session,Product.this,ratingSlider.getValue());
             }
         });
 
         // Every user can rate a particular product only once
-        if(this.clientRating!=0){
+        if (this.clientRating != 0) {
             rateButton.setEnabled(false);
             ratingSlider.setValue(this.clientRating);
             ratingSlider.setEnabled(false);
+        }
+
+        // If user doesn't have a particular product in his basket, then he
+        // must not be able to delete that product from his basket
+        if(this.stockInBasket==0){
+            removeFromBasket.setEnabled(false);
         }
 
         detailsPanel.add(ratingSlider);
@@ -202,6 +208,9 @@ public class Product {
         JPanel rateButtonPanel = new JPanel();
         rateButtonPanel.add(rateButton);
         detailsPanel.add(rateButtonPanel);
+
+        detailsPanel.add(addToBasketButton);
+        detailsPanel.add(removeFromBasket);
 
         return bigPanel;
     }

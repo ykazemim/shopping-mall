@@ -1,7 +1,3 @@
-package SQLDefinedClasses;
-import DataTypeClasses.Basket;
-import DataTypeClasses.Client;
-
 import java.sql.*;
 import java.util.ArrayList;
 

@@ -1,5 +1,3 @@
-package DataTypeClasses;
-
 public class Client {
     private final int idclient;
     private final int iduser;
