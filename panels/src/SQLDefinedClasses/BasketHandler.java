@@ -3,9 +3,7 @@ package SQLDefinedClasses;
 import DataTypeClasses.Basket;
 import DataTypeClasses.Product;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class BasketHandler {
@@ -154,4 +152,23 @@ public class BasketHandler {
         }
         return null;
     }
+    
+    public static ArrayList<Product> fetchProductsFromBasket(Connection connection,Basket basket){
+        try{
+            String sqlStatement = "SELECT * FROM basket_product WHERE idbasket = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1,basket.getIdBasket());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Product> products = new ArrayList<>();
+            while (resultSet.next()){
+                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("product")));
+            }
+            return products;
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching products from the basket in the database");
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
 }
