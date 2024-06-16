@@ -88,7 +88,7 @@ public class InitializeDB {
                           `rating` INT NULL,
                           PRIMARY KEY (`idrating`),
                           FOREIGN KEY (`client`) REFERENCES client(`idclient`) ON DELETE CASCADE,
-                          FOREIGN KEY (`product`) REFERENCES product(`idproduct`) ON DELETE CASCADE););
+                          FOREIGN KEY (`product`) REFERENCES product(`idproduct`) ON DELETE CASCADE);
                        """);
 
                 System.out.println("All done!");
