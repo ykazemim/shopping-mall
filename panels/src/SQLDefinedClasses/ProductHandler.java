@@ -60,15 +60,36 @@ public class ProductHandler {
         }
     }
 
-    public static Product fetchProduct(Connection connection, int id) {
-        // Fetch product from the database
+    public static Product fetchProduct(Connection connection, int id, Session session) {
+        // Fetch a specific product from the database
         try {
             String productStatement = "SELECT * FROM product WHERE id = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
             preparedStatement.setInt(1, id);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
+
+            int userRating = 0;
+            if (!session.isAdmin()) {
+                // Fetch client rating if exists
+                PreparedStatement prepareStatementRating = connection.prepareStatement("SELECT * FROM rating WHERE user = ? AND product = ?;");
+                prepareStatementRating.setInt(1, session.getIduser());
+                prepareStatementRating.setInt(2, resultSet.getInt("idproduct"));
+                ResultSet ratingResultSet = prepareStatementRating.executeQuery();
+                if (ratingResultSet.next()) {
+                    userRating = ratingResultSet.getInt("rating");
+                }
+            }
+
             if (resultSet.next()) {
-                return new Product(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getFloat("price"), resultSet.getString("image"), resultSet.getInt("stock"), resultSet.getInt("rating_count"), resultSet.getFloat("average_rating"), resultSet.getBoolean("available_for_client"));
+                return new Product(resultSet.getInt("id"),
+                        resultSet.getString("title"),
+                        resultSet.getFloat("price"),
+                        resultSet.getString("image"),
+                        resultSet.getInt("stock"),
+                        resultSet.getInt("rating_count"),
+                        resultSet.getFloat("average_rating"),
+                        resultSet.getBoolean("available_for_client"),
+                        userRating);
             }
         } catch (SQLException e){
             System.out.println("Something went wrong in fetching product from the database");
@@ -77,26 +98,50 @@ public class ProductHandler {
         return null;
     }
 
-    public static ArrayList<Product> fetchProducts(Connection connection, boolean onlyAvailableForClient) {
-        // Fetch products from the database based on availability for client
+    public static ArrayList<Product> fetchProducts(Connection connection, Session session) {
+        // Fetch products from the database based on user session
         ArrayList<Product> products = new ArrayList<>();
         try {
             String productStatement;
-            if (onlyAvailableForClient) {
+
+            if (!session.isAdmin()) {
+                // Fetch only available for client products if user is not admin
                 productStatement = "SELECT * FROM product WHERE available_for_client = ?;";
 
             } else
                 productStatement = "SELECT * FROM product;";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
-            if (onlyAvailableForClient)
-                preparedStatement.setBoolean(1, true);
+            PreparedStatement preparedStatementProduct = connection.prepareStatement(productStatement);
+            if (!session.isAdmin())
+                preparedStatementProduct.setBoolean(1, true);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet productResultSet = preparedStatementProduct.executeQuery();
 
-            while (resultSet.next()) {
-                products.add(new Product(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getFloat("price"), resultSet.getString("image"), resultSet.getInt("stock"), resultSet.getInt("rating_count"), resultSet.getFloat("average_rating"), resultSet.getBoolean("available_for_client")));
+            int userRating = 0;
+            if (!session.isAdmin()) {
+                // Fetch client rating if exists
+                PreparedStatement prepareStatementRating = connection.prepareStatement("SELECT * FROM rating WHERE user = ? AND product = ?;");
+                prepareStatementRating.setInt(1, session.getIduser());
+                prepareStatementRating.setInt(2, productResultSet.getInt("idproduct"));
+                ResultSet ratingResultSet = prepareStatementRating.executeQuery();
+                if (ratingResultSet.next()) {
+                    userRating = ratingResultSet.getInt("rating");
+                }
             }
+
+            while (productResultSet.next()) {
+                products.add(new Product(
+                        productResultSet.getInt("id"),
+                        productResultSet.getString("title"),
+                        productResultSet.getFloat("price"),
+                        productResultSet.getString("image"),
+                        productResultSet.getInt("stock"),
+                        productResultSet.getInt("rating_count"),
+                        productResultSet.getFloat("average_rating"),
+                        productResultSet.getBoolean("available_for_client"),
+                        userRating));
+            }
+
             return products;
         } catch (SQLException e){
             System.out.println("Something went wrong in fetching products from the database");

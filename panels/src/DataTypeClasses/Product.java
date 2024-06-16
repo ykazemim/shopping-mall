@@ -9,8 +9,9 @@ public class Product {
     private int ratingCount;
     private float averageRating;
     private boolean availableForClient;
+    private int clientRating;
 
-    public Product(int idProduct, String title, float price, String pathToImage, int stock, int ratingCount, float averageRating, boolean availableForClient) {
+    public Product(int idProduct, String title, float price, String pathToImage, int stock, int ratingCount, float averageRating, boolean availableForClient, int clientRating) {
         this.idProduct = idProduct;
         this.title = title;
         this.price = price;
@@ -19,6 +20,16 @@ public class Product {
         this.ratingCount = ratingCount;
         this.averageRating = averageRating;
         this.availableForClient = availableForClient;
+        this.clientRating = clientRating;
+    }
+
+
+    public int getClientRating() {
+        return clientRating;
+    }
+
+    public void setClientRating(int clientRating) {
+        this.clientRating = clientRating;
     }
 
     public int getIdProduct() {
