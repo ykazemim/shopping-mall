@@ -6,6 +6,7 @@ import DataTypeClasses.Product;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class BasketHandler {
 
@@ -101,22 +102,22 @@ public class BasketHandler {
         return null;
     }
 
-    public static Basket fetchBasketFromClient(Connection connection, int client, boolean isProceeded) {
+    public static ArrayList<Basket> fetchBasketFromClient(Connection connection, int client, boolean isProceeded) {
         // Fetch the basket with the client ID
+        ArrayList<Basket> baskets = new ArrayList<>();
         try{
             String basketStatement = "SELECT * FROM basket WHERE client = ? AND is_proceeded = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setInt(1, client);
             preparedStatement.setBoolean(2, isProceeded);
             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            while (resultSet.next()){
                 if (resultSet.getDate("date_proceeded") == null)
-                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
+                    baskets.add( new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
                 else
-                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
-            } else {
-                return null;
+                    baskets.add(new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
             }
+            return baskets;
         } catch (java.sql.SQLException e){
             System.out.println("Something went wrong in fetching basket from the database");
             System.out.println(e.getMessage());

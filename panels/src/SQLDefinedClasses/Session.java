@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Session {
     private int iduser;
@@ -54,10 +55,13 @@ public class Session {
                     this.clientCredit = rs.getFloat(3);
 
                     // Fetch a basket for the client and create one if it doesn't exist
-                    Basket basket = BasketHandler.fetchBasketFromClient(connection, idclient,false);
-                    if(basket == null)
+                    ArrayList<Basket> baskets = new ArrayList<>();
+                    Basket basket;
+                    baskets = BasketHandler.fetchBasketFromClient(connection, idclient,false);
+                    if( baskets == null || baskets.isEmpty())
                         basket = BasketHandler.createBasket(connection, idclient);
-                    System.out.println(basket.getClient());
+                    else
+                        basket = baskets.get(0);
 
                     // TODO : Return basket object
 
