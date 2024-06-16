@@ -3,8 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import SQLDefinedClasses.Session;
-import SQLDefinedClasses.Validator;
 
 public class SignInPanel extends JPanel implements ActionListener {
 

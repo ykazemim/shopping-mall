@@ -1,7 +1,3 @@
-import SQLDefinedClasses.Session;
-import SQLDefinedClasses.User;
-import SQLDefinedClasses.Validator;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
