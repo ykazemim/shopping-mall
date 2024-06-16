@@ -153,7 +153,7 @@ public class BasketHandler {
         return null;
     }
     
-    public static ArrayList<Product> fetchProductsFromBasket(Connection connection,Basket basket){
+    public static ArrayList<Product> fetchProductsFromBasket(Connection connection,Basket basket, Session session){
         try{
             String sqlStatement = "SELECT * FROM basket_product WHERE idbasket = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
@@ -161,7 +161,7 @@ public class BasketHandler {
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()){
-                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("product")));
+                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("product"), session));
             }
             return products;
         } catch (SQLException e){
