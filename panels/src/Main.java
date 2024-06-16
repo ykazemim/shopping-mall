@@ -11,7 +11,6 @@ public class Main {
 
         // Create a connection to sql server
         new Initialize(dbURL, username, password);
-        Initialize.setSession(new Session(Initialize.connection,"molio_98","Moli@1298"));
 
         frame = new JFrame("Shopping Mall");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,14 +18,14 @@ public class Main {
 //        frame.setResizable(false);
 
 
-//        SignInPanel signInPanel = new SignInPanel();
-//        frame.add(signInPanel);
+        SignInPanel signInPanel = new SignInPanel();
+        frame.add(signInPanel);
 
 //        AddProductPanel addProductPanel = new AddProductPanel();
 //        frame.add(addProductPanel);
 
-        ProductScrollPanel productScrollPanel = new ProductScrollPanel();
-        frame.add(productScrollPanel);
+//        ProductScrollPanel productScrollPanel = new ProductScrollPanel();
+//        frame.add(productScrollPanel);
 
 
         refreshFrame();

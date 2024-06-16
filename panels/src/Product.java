@@ -115,7 +115,7 @@ public class Product {
 
     public JPanel createPanel() {
         JPanel bigPanel = new JPanel(new GridBagLayout());
-        bigPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
+        bigPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
