@@ -84,12 +84,12 @@ public class InitializeDB {
                           `idrating` INT NOT NULL AUTO_INCREMENT,
                           `client` INT NOT NULL,
                           `product` INT NOT NULL,
-                          `rating` FLOAT NULL,
+                          `rating` INT NULL,
                           PRIMARY KEY (`idrating`),
                           FOREIGN KEY (`client`) REFERENCES client(`idclient`) ON DELETE CASCADE,
                           FOREIGN KEY (`product`) REFERENCES product(`idproduct`) ON DELETE CASCADE););
                        """);
-                
+
                 System.out.println("All done!");
 
             } catch (SQLException ex){
