@@ -95,7 +95,7 @@ public class ProductHandler {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                products.add(new Product(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getFloat("price"), resultSet.getString("image"), resultSet.getInt("stock"), resultSet.getInt("rating_count"), resultSet.getFloat("average_rating"), resultSet.getBoolean("available_for_client"));
+                products.add(new Product(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getFloat("price"), resultSet.getString("image"), resultSet.getInt("stock"), resultSet.getInt("rating_count"), resultSet.getFloat("average_rating"), resultSet.getBoolean("available_for_client")));
             }
             return products;
         } catch (SQLException e){

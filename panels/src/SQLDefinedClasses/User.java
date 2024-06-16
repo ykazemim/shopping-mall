@@ -1,5 +1,6 @@
 package SQLDefinedClasses;
 import DataTypeClasses.Basket;
+import DataTypeClasses.Client;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -66,6 +67,23 @@ public class User {
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public static ArrayList<Client> fetchAllClients(Connection connection) {
+        ArrayList<Client> clients = new ArrayList<>();
+        try{
+            String clientStatement = "SELECT * FROM Client;";
+            PreparedStatement preparedStatement = connection.prepareStatement(clientStatement);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                clients.add(new Client(resultSet.getInt("idclient"), resultSet.getInt("user"), resultSet.getString("address"), resultSet.getFloat("credit")));
+            }
+            return clients;
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching clients from the database");
+            System.out.println(e.getMessage());
+        }
+        return clients;
     }
 
     public Session getSession() {
