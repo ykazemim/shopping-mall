@@ -3,7 +3,10 @@ package SQLDefinedClasses;
 import DataTypeClasses.Product;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ProductHandler {
 
@@ -72,6 +75,34 @@ public class ProductHandler {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public static ArrayList<Product> fetchProducts(Connection connection, boolean onlyAvailableForClient) {
+        // Fetch products from the database based on availability for client
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            String productStatement;
+            if (onlyAvailableForClient) {
+                productStatement = "SELECT * FROM product WHERE available_for_client = ?;";
+
+            } else
+                productStatement = "SELECT * FROM product;";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
+            if (onlyAvailableForClient)
+                preparedStatement.setBoolean(1, true);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                products.add(new Product(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getFloat("price"), resultSet.getString("image"), resultSet.getInt("stock"), resultSet.getInt("rating_count"), resultSet.getFloat("average_rating"), resultSet.getBoolean("available_for_client")));
+            }
+            return products;
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching products from the database");
+            System.out.println(e.getMessage());
+        }
+        return products;
     }
 
 }
