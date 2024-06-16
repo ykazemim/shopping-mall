@@ -10,8 +10,9 @@ public class Product {
     private float averageRating;
     private boolean availableForClient;
     private int clientRating;
+    private int stockInBasket;
 
-    public Product(int idProduct, String title, float price, String pathToImage, int stock, int ratingCount, float averageRating, boolean availableForClient, int clientRating) {
+    public Product(int idProduct, String title, float price, String pathToImage, int stock, int ratingCount, float averageRating, boolean availableForClient, int clientRating, int stockInBasket) {
         this.idProduct = idProduct;
         this.title = title;
         this.price = price;
@@ -21,8 +22,16 @@ public class Product {
         this.averageRating = averageRating;
         this.availableForClient = availableForClient;
         this.clientRating = clientRating;
+        this.stockInBasket = stockInBasket;
     }
 
+    public int getStockInBasket() {
+        return stockInBasket;
+    }
+
+    public void setStockInBasket(int stockInBasket) {
+        this.stockInBasket = stockInBasket;
+    }
 
     public int getClientRating() {
         return clientRating;
