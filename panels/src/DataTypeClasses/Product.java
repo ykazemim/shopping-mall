@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -97,7 +99,7 @@ public class Product {
 
     public JPanel createPanel() {
         JPanel bigPanel = new JPanel(new GridBagLayout());
-        bigPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY,3));
+        bigPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
@@ -129,12 +131,13 @@ public class Product {
         JPanel detailsPanel = new JPanel(new GridLayout(4, 3));
 
         JLabel tempLabel = new JLabel("test");
-        JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>"+this.title+"</html>");
-        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>"+this.price+"</html>");
-        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>"+this.averageRating+"</html>");
-        JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>"+this.ratingCount+"</html>");
-        JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>"+this.stock+"</html>");
-        JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>"+this.availableForClient+"</html>");
+        JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
+        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
+        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
+        JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>" + this.stock + "</html>");
+        JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>" + this.availableForClient + "</html>");
+        JButton rateButton = new JButton("Rate");
 
         detailsPanel.add(titleLabel);
         detailsPanel.add(priceLabel);
@@ -168,7 +171,7 @@ public class Product {
 
         detailsPanel.add(ratingSlider);
 
-        detailsPanel.add(new JButton("Rate"));
+        detailsPanel.add(rateButton);
 
         return bigPanel;
     }
