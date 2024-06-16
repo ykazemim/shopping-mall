@@ -2,6 +2,7 @@ package SQLDefinedClasses;
 import DataTypeClasses.Basket;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class User {
     private Session newSession = null;
@@ -58,11 +59,6 @@ public class User {
 
             if(idUser == -1)
                 throw new Exception("Something went wrong in getting client id");
-
-            // Fetch a basket for the client and create one if it doesn't exist
-            Basket basket = BasketHandler.fetchBasketFromClient(connection, idUser,false);
-            if(basket == null)
-                 BasketHandler.createBasket(connection, idUser);
 
             // Set the session
             newSession = new Session(connection, username, password);

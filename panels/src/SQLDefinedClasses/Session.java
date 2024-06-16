@@ -17,6 +17,7 @@ public class Session {
     private String clientAddress;
     private float clientCredit;
     private boolean isAdmin;
+    private Basket clientBasket;
 
     public Session(Connection connection,String username, String password) throws Exception{
         String hashedPassword = PasswordHasher.hashPassword(password);
@@ -63,8 +64,7 @@ public class Session {
                     else
                         basket = baskets.get(0);
 
-                    // TODO : Return basket object
-
+                    this.clientBasket = basket;
 
                 } else {
                     this.isAdmin = true;
@@ -107,6 +107,10 @@ public class Session {
         return clientCredit;
     }
 
+    public Basket getClientBasket() {
+        return clientBasket;
+    }
+
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -125,5 +129,9 @@ public class Session {
 
     public void setClientCredit(float clientCredit) {
         this.clientCredit = clientCredit;
+    }
+
+    public void setClientBasket(Basket clientBasket) {
+        this.clientBasket = clientBasket;
     }
 }
