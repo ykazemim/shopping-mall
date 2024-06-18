@@ -107,6 +107,7 @@ public class SignInPanel extends JPanel implements ActionListener {
                 try {
                     Initialize.setSession(new Session(Initialize.connection,username,password));
                     errorsLabel.setText("");
+                    Main.changePanel(new ProductsPanel());
                 } catch (Exception ex){
                     errorsLabel.setText("* "+ex.getMessage());
                 }
@@ -117,7 +118,6 @@ public class SignInPanel extends JPanel implements ActionListener {
                 }
             }
             errorsLabel.setVisible(true);
-            Main.refreshFrame();
             Main.refreshFrame();
         } else if (src.equals(signUpButton)) {
             Main.changePanel(new SignUpPanel());

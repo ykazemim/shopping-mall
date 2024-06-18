@@ -210,7 +210,7 @@ public class AddProductPanel extends JPanel implements ActionListener {
             } else {
                 errorsLabel.setText("");
                 for(String error : errors){
-                    errorsLabel.setText(errorsLabel.getText() + "\n" + error);
+                    errorsLabel.setText(errorsLabel.getText() + "\n* " + error);
                 }
             }
 

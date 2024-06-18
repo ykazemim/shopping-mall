@@ -153,25 +153,25 @@ public class SignUpPanel extends JPanel implements ActionListener {
             String phone = phoneTextField.getText();
             String address = addressTextField.getText();
 
-            ArrayList<String> errors = Validator.validateSingUpForm(name,username, password,phone, address);
+            ArrayList<String> errors = Validator.validateSingUpForm(name, username, password, phone, address);
 
-            if(errors.isEmpty()){
+            if (errors.isEmpty()) {
                 try {
                     User newUser = new User(Initialize.connection, name, username, password, phone, address);
                     Initialize.setSession(newUser.getSession());
                     errorsLabel.setText("");
-                } catch (Exception ex){
+                    Main.changePanel(new ProductsPanel());
+                } catch (Exception ex) {
                     errorsLabel.setText("* " + ex.getMessage());
                 }
             } else {
                 errorsLabel.setText("");
-                for(String error : errors){
+                for (String error : errors) {
                     errorsLabel.setText(errorsLabel.getText() + "\n* " + error);
                 }
             }
 
             errorsLabel.setVisible(true);
-            Main.refreshFrame();
             Main.refreshFrame();
         } else if (src.equals(backButton)) {
             Main.changePanel(new SignInPanel());
