@@ -156,7 +156,7 @@ public class ProductHandler {
             }
 
             PreparedStatement preparedStatementProduct = connection.prepareStatement(productStatement);
-            if (!session.isAdmin())
+            if (!session.isAdmin() && (sortType == SORT_BY_PRICE || sortType == SORT_BY_RATING))
                 preparedStatementProduct.setBoolean(1, true);
 
             ResultSet productResultSet = preparedStatementProduct.executeQuery();
@@ -205,6 +205,7 @@ public class ProductHandler {
         } catch (SQLException e){
             System.out.println("Something went wrong in fetching products from the database");
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return products;
     }
