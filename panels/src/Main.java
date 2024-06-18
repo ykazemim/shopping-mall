@@ -11,11 +11,10 @@ public class Main {
 
         // Create a connection to sql server
         new Initialize(dbURL, username, password);
-        Initialize.setSession(new Session(Initialize.connection,"molio_98","Moli@1298"));
 
         frame = new JFrame("Shopping Mall");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridLayout(1, 1));
+        frame.setLayout(new GridLayout(1,1));
 //        frame.setResizable(false);
 
 
@@ -25,8 +24,10 @@ public class Main {
 //        AddProductPanel addProductPanel = new AddProductPanel();
 //        frame.add(addProductPanel);
 
-        ProductScrollPanel productScrollPanel = new ProductScrollPanel();
-        frame.add(productScrollPanel);
+        Initialize.setSession(new Session(Initialize.connection,"shahabzzzzzz","Moli@1299"));
+        ProductsPanel productsPanel = new ProductsPanel();
+
+        frame.add(productsPanel);
 
 
         refreshFrame();
@@ -35,6 +36,7 @@ public class Main {
     }
 
     protected static void refreshFrame() {
+        frame.pack();
         frame.pack();
         frame.setSize(new Dimension((int) (frame.getSize().width * 1.25), (int) (frame.getSize().height * 1.25)));
         frame.revalidate();

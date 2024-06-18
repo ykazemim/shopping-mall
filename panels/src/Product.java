@@ -115,13 +115,13 @@ public class Product {
 
     public JPanel createPanel() {
         JPanel bigPanel = new JPanel(new GridBagLayout());
-        bigPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
+        bigPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
 
         // Resizing the product's image into a standard size
-        // and then adding it to a Jlabel and finally adding it
+        // and then adding it to a JLabel and finally adding it
         // to the panel
         JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension(IMAGE_DIMENSION, IMAGE_DIMENSION));
@@ -186,7 +186,34 @@ public class Product {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Rate button clicked");
-                ProductHandler.calculateRating(Initialize.connection, Initialize.session,Product.this,ratingSlider.getValue());
+                ProductHandler.calculateRating(Initialize.connection, Initialize.session, Product.this, ratingSlider.getValue());
+                Main.changePanel(new ProductsPanel());
+            }
+        });
+
+        addToBasketButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Product.this.stockInBasket < Product.this.stock) {
+                    BasketHandler.addProductToBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
+                }
+                if(Product.this.stockInBasket == Product.this.stock){
+                    addToBasketButton.setEnabled(false);
+                }
+                Main.changePanel(new ProductsPanel());
+                System.out.println(Product.this.stockInBasket);
+            }
+        });
+
+        removeFromBasket.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BasketHandler.removeProductFromBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
+                if (Product.this.stockInBasket - 1 < Product.this.stock) {
+                    addToBasketButton.setEnabled(true);
+                }
+                Main.changePanel(new ProductsPanel());
+                System.out.println(Product.this.stockInBasket);
             }
         });
 
@@ -199,8 +226,14 @@ public class Product {
 
         // If user doesn't have a particular product in his basket, then he
         // must not be able to delete that product from his basket
-        if(this.stockInBasket==0){
+        if (this.stockInBasket == 0) {
             removeFromBasket.setEnabled(false);
+        }
+
+        // If user has the most possible count of a particular product in his basket,
+        // then he must not be able to add that product to his basket again
+        if (this.stockInBasket == this.stock) {
+            addToBasketButton.setEnabled(false);
         }
 
         detailsPanel.add(ratingSlider);
