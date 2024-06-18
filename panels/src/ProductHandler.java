@@ -3,6 +3,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class ProductHandler {
     public static final int SORT_BY_PRICE = 2;
@@ -199,7 +201,7 @@ public class ProductHandler {
                         userRating,
                         userStock));
             }
-
+            Collections.reverse(products);
             return products;
         } catch (SQLException e){
             System.out.println("Something went wrong in fetching products from the database");

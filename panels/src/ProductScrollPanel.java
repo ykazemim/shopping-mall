@@ -4,7 +4,8 @@ import java.util.ArrayList;
 public class ProductScrollPanel extends JPanel {
 
     public ProductScrollPanel(){
-        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection,Initialize.session);
+        // TODO get type of sorting from user
+        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection,Initialize.session,ProductHandler.SORT_BY_RATING,ProductHandler.ASCENDING_ORDER);
 
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel,BoxLayout.Y_AXIS));
