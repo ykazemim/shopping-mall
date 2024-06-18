@@ -160,7 +160,7 @@ public class SignUpPanel extends JPanel implements ActionListener {
                     User newUser = new User(Initialize.connection, name, username, password, phone, address);
                     Initialize.setSession(newUser.getSession());
                     errorsLabel.setText("");
-                    Main.changePanel(new ProductScrollPanel());
+                    Main.changePanel(new ProductsPanel());
                 } catch (Exception ex) {
                     errorsLabel.setText("* " + ex.getMessage());
                 }
@@ -172,7 +172,6 @@ public class SignUpPanel extends JPanel implements ActionListener {
             }
 
             errorsLabel.setVisible(true);
-            Main.refreshFrame();
             Main.refreshFrame();
         } else if (src.equals(backButton)) {
             Main.changePanel(new SignInPanel());
