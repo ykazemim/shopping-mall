@@ -5,6 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProductHandler {
+    public static final int SORT_BY_PRICE = 2;
+    public static final int SORT_BY_RATING = 1;
+    public static final int DEFAULT_ORDER = 0;
+    public static final int ASCENDING_ORDER = 1;
+    public static final int DESCENDING_ORDER = 0;
 
     public static void addProduct(Connection connection, String title, float price, boolean availableForClient, String pathToImage, int stock) {
         // Add product to the database
@@ -108,18 +113,46 @@ public class ProductHandler {
         return null;
     }
 
-    public static ArrayList<Product> fetchProducts(Connection connection, Session session) {
+    public static ArrayList<Product> fetchProducts(Connection connection, Session session, int sortType, int orderType) {
         // Fetch products from the database based on user session
         ArrayList<Product> products = new ArrayList<>();
+
+        // Creating the product statement based on the sort type and order type
+
         try {
             String productStatement;
 
-            if (!session.isAdmin()) {
-                // Fetch only available for client products if user is not admin
-                productStatement = "SELECT * FROM product WHERE available_for_client = ?;";
+            switch (sortType) {
+                case SORT_BY_RATING:
+                    if (session.isAdmin())
+                        if (orderType == ASCENDING_ORDER)
+                            productStatement = "SELECT * FROM product ORDER BY average_rating ASC;";
+                        else
+                            productStatement = "SELECT * FROM product ORDER BY average_rating DESC;";
+                    else
+                        if (orderType == ASCENDING_ORDER)
+                            productStatement = "SELECT * FROM product WHERE available_for_client = ? ORDER BY average_rating ASC;";
+                        else
+                            productStatement = "SELECT * FROM product WHERE available_for_client = ? ORDER BY average_rating DESC;";
+                    break;
+                case SORT_BY_PRICE:
+                    if (session.isAdmin())
+                        if (orderType == ASCENDING_ORDER)
+                            productStatement = "SELECT * FROM product ORDER BY price ASC;";
+                        else
+                            productStatement = "SELECT * FROM product ORDER BY price DESC;";
 
-            } else
-                productStatement = "SELECT * FROM product;";
+                    else
+                        if (orderType == ASCENDING_ORDER)
+                            productStatement = "SELECT * FROM product WHERE available_for_client = ? ORDER BY price ASC;";
+                        else
+                            productStatement = "SELECT * FROM product WHERE available_for_client = ? ORDER BY price DESC;";
+                    break;
+
+                default:
+                    productStatement = "SELECT * FROM product;";
+                    break;
+            }
 
             PreparedStatement preparedStatementProduct = connection.prepareStatement(productStatement);
             if (!session.isAdmin())
