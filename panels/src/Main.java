@@ -24,7 +24,7 @@ public class Main {
 //        AddProductPanel addProductPanel = new AddProductPanel();
 //        frame.add(addProductPanel);
 
-        Initialize.setSession(new Session(Initialize.connection,"shahabzzzzzz","Moli@1299"));
+        Initialize.setSession(new Session(Initialize.connection,"cool-client","Moh@mmad1298"));
         ProductsPanel productsPanel = new ProductsPanel();
 
         frame.add(productsPanel);

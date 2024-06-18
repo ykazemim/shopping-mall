@@ -34,18 +34,18 @@ public class ProductsPanel extends JPanel {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
 
-        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session);
+        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session,ProductHandler.SORT_BY_RATING,ProductHandler.ASCENDING_ORDER);
 
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
         for (Product product : products) {
             listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
+//            listPanel.add(product.createPanel());
+//            listPanel.add(product.createPanel());
+//            listPanel.add(product.createPanel());
+//            listPanel.add(product.createPanel());
+//            listPanel.add(product.createPanel());
         }
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
