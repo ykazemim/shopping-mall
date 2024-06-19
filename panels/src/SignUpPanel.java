@@ -160,7 +160,7 @@ public class SignUpPanel extends JPanel implements ActionListener {
                     User newUser = new User(Initialize.connection, name, username, password, phone, address);
                     Initialize.setSession(newUser.getSession());
                     errorsLabel.setText("");
-                    Main.changePanel(new ProductsPanel());
+                    Main.changePanel(new ClientProductsPanel());
                 } catch (Exception ex) {
                     errorsLabel.setText("* " + ex.getMessage());
                 }

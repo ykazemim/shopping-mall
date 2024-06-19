@@ -26,11 +26,11 @@ public class SignInPanel extends JPanel implements ActionListener {
         usernameTextField = new JTextField();
         passwordTextField = new JPasswordField();
 
-        introLabel.setPreferredSize(new Dimension(300,30));
+        introLabel.setPreferredSize(new Dimension(300, 30));
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
         introLabel.setOpaque(true);
         introLabel.setBackground(Color.GREEN);
-        introLabel.setFont(new Font(introLabel.getFont().getName(),Font.BOLD, introLabel.getFont().getSize()+1));
+        introLabel.setFont(new Font(introLabel.getFont().getName(), Font.BOLD, introLabel.getFont().getSize() + 1));
         errorsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         errorsLabel.setLineWrap(true);
         errorsLabel.setEditable(false);
@@ -103,17 +103,23 @@ public class SignInPanel extends JPanel implements ActionListener {
 
             ArrayList<String> errors = Validator.validateSignInForm(username, password);
 
-            if(errors.isEmpty()){
+            if (errors.isEmpty()) {
                 try {
-                    Initialize.setSession(new Session(Initialize.connection,username,password));
+                    Initialize.setSession(new Session(Initialize.connection, username, password));
                     errorsLabel.setText("");
-                    Main.changePanel(new ProductsPanel());
-                } catch (Exception ex){
-                    errorsLabel.setText("* "+ex.getMessage());
+
+                    if (Initialize.session.isAdmin()) {
+                        Main.changePanel(new AdminProductsPanel());
+                    } else {
+                        Main.changePanel(new ClientProductsPanel());
+                    }
+
+                } catch (Exception ex) {
+                    errorsLabel.setText("* " + ex.getMessage());
                 }
             } else {
                 errorsLabel.setText("");
-                for(String error : errors){
+                for (String error : errors) {
                     errorsLabel.setText(errorsLabel.getText() + "\n* " + error);
                 }
             }
