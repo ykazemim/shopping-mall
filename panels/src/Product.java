@@ -287,7 +287,8 @@ public class Product {
                 // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                // TODO make changes to the runtime
+                stockInBasket.setText("<html><font color='blue'>Stock in basket: </font>" + Product.this.stockInBasket + "</html>");
+
                 Main.refreshFrame();
             }
         });
@@ -306,7 +307,7 @@ public class Product {
                 // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                // TODO make changes to the runtime
+                stockInBasket.setText("<html><font color='blue'>Stock in basket: </font>" + Product.this.stockInBasket + "</html>");
 
                 Main.refreshFrame();
             }

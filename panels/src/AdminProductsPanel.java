@@ -165,7 +165,7 @@ public class AdminProductsPanel extends JPanel {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
         for (Product product : products)
-            listPanel.add(product.createPanel(false));
+            listPanel.add(product.createPanel(true));
 
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -197,7 +197,7 @@ public class AdminProductsPanel extends JPanel {
             listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
             for (Product product : products) {
-                listPanel.add(product.createPanel(false));
+                listPanel.add(product.createPanel(true));
                 scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             }
 
@@ -233,7 +233,7 @@ public class AdminProductsPanel extends JPanel {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
         for (Product product : products)
-            listPanel.add(product.createPanel(false));
+            listPanel.add(product.createPanel(true));
 
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
