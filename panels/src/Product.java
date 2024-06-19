@@ -263,13 +263,16 @@ public class Product {
         rateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Rate button clicked");
+                // Make changes to the database
                 ProductHandler.calculateRating(Initialize.connection, Initialize.session, Product.this, ratingSlider.getValue());
+
+                // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
                 Product.this.updatePanelFields(ratingCount, averageRating);
                 rateButton.setEnabled(false);
                 ratingSlider.setEnabled(false);
+
                 Main.refreshFrame();
             }
         });
@@ -277,29 +280,44 @@ public class Product {
         addToBasketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Product.this.stockInBasket < Product.this.stock) {
+                // Make changes to the database
+                if (Product.this.stockInBasket + 1 <= Product.this.stock) {
                     BasketHandler.addProductToBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
                 }
-                if (Product.this.stockInBasket == Product.this.stock) {
+
+                // Make changes accordingly in the runtime
+                if (Product.this.stockInBasket + 1 == Product.this.stock) {
                     addToBasketButton.setEnabled(false);
                 }
+
+                if (!removeFromBasket.isEnabled())
+                    removeFromBasket.setEnabled(true);
+
+                // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                Product.this.updatePanelFields(ratingCount, averageRating);
+                // TODO make changes to the runtime
                 Main.refreshFrame();
-                System.out.println(Product.this.stockInBasket);
             }
         });
 
         removeFromBasket.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Make changes to the database
                 BasketHandler.removeProductFromBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
-                if (Product.this.stockInBasket - 1 < Product.this.stock) {
+                if (!addToBasketButton.isEnabled()) {
                     addToBasketButton.setEnabled(true);
                 }
-                Main.changePanel(new AdminProductsPanel());
-                System.out.println(Product.this.stockInBasket);
+                if (Product.this.stockInBasket - 1 == 0)
+                    removeFromBasket.setEnabled(false);
+
+                // Update product object accordingly
+                Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
+                Product.this.updateProduct(temp);
+                // TODO make changes to the runtime
+
+                Main.refreshFrame();
             }
         });
 
