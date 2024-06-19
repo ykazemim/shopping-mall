@@ -40,7 +40,7 @@ public class BasketHandler {
             preparedStatement.executeUpdate();
 
             // Fetch the updated basket
-            basket = fetchBasketFromId(connection, basket.getIdBasket());
+            Initialize.session.setClientBasket(fetchBasketFromId(connection, basket.getIdBasket()));
 
         } catch (SQLException e) {
             System.out.println("Something went wrong in fetching product from the basket in the database");
@@ -85,7 +85,7 @@ public class BasketHandler {
                 preparedStatement.executeUpdate();
 
                 // Fetch the updated basket
-                basket = fetchBasketFromId(connection, basket.getIdBasket());
+                Initialize.session.setClientBasket(fetchBasketFromId(connection, basket.getIdBasket()));
             }
 
         } catch (SQLException e) {
