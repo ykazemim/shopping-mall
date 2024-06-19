@@ -21,4 +21,9 @@ public class Initialize {
         session = passedSession;
     }
 
+    public static void removeSession(){
+        // For logout
+        session = null;
+    }
+
 }
