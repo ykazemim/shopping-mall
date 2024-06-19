@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class ProductsPanel extends JPanel {
+public class AdminProductsPanel extends JPanel {
 
-    public ProductsPanel() {
+    public AdminProductsPanel() {
         this.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -99,7 +99,6 @@ public class ProductsPanel extends JPanel {
 
 
         JLabel userTypeLabel = new JLabel("User type: " + (Initialize.session.isAdmin() ? "admin" : "client"));
-        JButton balanceButton = new JButton("Balance");
         JButton logOutButton = new JButton("Log out");
 
 
@@ -107,9 +106,8 @@ public class ProductsPanel extends JPanel {
         userTypeLabel.setVerticalAlignment(SwingConstants.CENTER);
         userTypeLabel.setFont(new Font(userTypeLabel.getFont().getName(), Font.BOLD, userTypeLabel.getFont().getSize() + 2));
 
-        // This panel contains addButton, clientButton and salesButton
-        JPanel adminOptionsPanel = new JPanel(new GridLayout(2, 1));
-        adminOptionsPanel.add(balanceButton);
+        // This panel contains logOutButton
+        JPanel adminOptionsPanel = new JPanel(new GridLayout(1, 1));
         adminOptionsPanel.add(logOutButton);
 
         gbc.gridx = 0;
@@ -150,10 +148,10 @@ public class ProductsPanel extends JPanel {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
         for (Product product : products) {
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
-            listPanel.add(product.createPanel());
+            listPanel.add(product.createPanel(true));
+            listPanel.add(product.createPanel(true));
+            listPanel.add(product.createPanel(true));
+            listPanel.add(product.createPanel(true));
         }
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -171,13 +169,12 @@ public class ProductsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.weighty = 0;
 
-        String[] sortOptions = {"Default (Time Added)", "Rating", "Price"};
+        String[] sortOptions = {"Default (Time Added)", "Rating ascending","Rating descending", "Price ascending","Price descending"};
 
         JLabel sortLabel = new JLabel("Sort by: ");
         JTextField searchTextField = new JTextField();
         JButton searchButton = new JButton("Search");
         JButton sortButton = new JButton("Sort");
-        JButton basketButton = new JButton("Basket");
         JButton profileButton = new JButton("Profile");
         JComboBox<String> sortComboBox = new JComboBox<>(sortOptions);
 
@@ -227,12 +224,6 @@ public class ProductsPanel extends JPanel {
         JPanel basketAndProfilePanel = new JPanel(new GridBagLayout());
 
         gbc.gridx = 0;
-        gbc.weightx = 1;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        basketAndProfilePanel.add(basketButton, gbc);
-
-        gbc.gridx++;
         gbc.anchor = GridBagConstraints.LINE_END;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         basketAndProfilePanel.add(profileButton, gbc);
