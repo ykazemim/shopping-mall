@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
 public class Product {
     private static final int IMAGE_DIMENSION = 150;
     private int idProduct;
@@ -32,6 +33,7 @@ public class Product {
         this.clientRating = clientRating;
         this.stockInBasket = stockInBasket;
     }
+
 
     public int getStockInBasket() {
         return stockInBasket;
@@ -146,7 +148,6 @@ public class Product {
         // This panel contains product's details
         JPanel detailsPanel = new JPanel(new GridLayout(5, 3));
 
-        JLabel tempLabel = new JLabel("test");
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
         JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
         JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
@@ -187,7 +188,10 @@ public class Product {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Rate button clicked");
                 ProductHandler.calculateRating(Initialize.connection, Initialize.session, Product.this, ratingSlider.getValue());
-                Main.changePanel(new ProductsPanel());
+                Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
+                Product.this.updateProduct(temp);
+                Product.this.updatePanelFields(ratingCount, averageRating);
+                Main.refreshFrame();
             }
         });
 
@@ -197,10 +201,13 @@ public class Product {
                 if (Product.this.stockInBasket < Product.this.stock) {
                     BasketHandler.addProductToBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
                 }
-                if(Product.this.stockInBasket == Product.this.stock){
+                if (Product.this.stockInBasket == Product.this.stock) {
                     addToBasketButton.setEnabled(false);
                 }
-                Main.changePanel(new ProductsPanel());
+                Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
+                Product.this.updateProduct(temp);
+                Product.this.updatePanelFields(ratingCount, averageRating);
+                Main.refreshFrame();
                 System.out.println(Product.this.stockInBasket);
             }
         });
@@ -246,6 +253,26 @@ public class Product {
         detailsPanel.add(removeFromBasket);
 
         return bigPanel;
+    }
+
+    private void updateProduct(Product product) {
+        this.idProduct = product.getIdProduct();
+        this.title = product.getTitle();
+        this.price = product.getPrice();
+        this.pathToImage = product.getPathToImage();
+        this.stock = product.getStock();
+        this.ratingCount = product.getRatingCount();
+        this.averageRating = product.getAverageRating();
+        this.availableForClient = product.isAvailableForClient();
+        this.clientRating = product.getClientRating();
+        this.stockInBasket = product.getStockInBasket();
+    }
+
+
+    private void updatePanelFields(JLabel ratingCount, JLabel averageRating) {
+        ratingCount.setText("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
+        averageRating.setText("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        // TODO add and remove stock in basket
     }
 
     private ImageIcon loadImage() throws Exception {
