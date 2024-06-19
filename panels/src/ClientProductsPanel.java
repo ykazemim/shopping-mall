@@ -304,7 +304,7 @@ public class ClientProductsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ClientProductsPanel.this.updateScrollPanel(
-                        ClientProductsPanel.this.createScrollPanel(searchTextField.getText())
+                ClientProductsPanel.this.createScrollPanel(searchTextField.getText())
                 );
             }
         });

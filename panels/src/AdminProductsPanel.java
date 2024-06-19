@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class AdminProductsPanel extends JPanel {
+    private JPanel scrollPanel;
 
     public AdminProductsPanel() {
         this.setLayout(new GridBagLayout());
@@ -35,7 +36,8 @@ public class AdminProductsPanel extends JPanel {
         gbc.weighty = 0.8;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
-        this.add(createScrollPanel(), gbc);
+        this.scrollPanel = createScrollPanel();
+        this.add(this.scrollPanel, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -101,6 +103,14 @@ public class AdminProductsPanel extends JPanel {
         JLabel userTypeLabel = new JLabel("User type: " + (Initialize.session.isAdmin() ? "admin" : "client"));
         JButton logOutButton = new JButton("Log out");
 
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Initialize.removeSession();
+                Main.changePanel(new SignInPanel());
+            }
+        });
+
 
         userTypeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         userTypeLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -142,17 +152,82 @@ public class AdminProductsPanel extends JPanel {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
 
-        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, ProductHandler.SORT_BY_RATING, ProductHandler.ASCENDING_ORDER);
+        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, ProductHandler.DEFAULT_ORDER, ProductHandler.DESCENDING_ORDER);
 
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
-        for (Product product : products) {
-            listPanel.add(product.createPanel(true));
-            listPanel.add(product.createPanel(true));
-            listPanel.add(product.createPanel(true));
-            listPanel.add(product.createPanel(true));
+        for (Product product : products)
+            listPanel.add(product.createPanel(false));
+
+        JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        // Setting a maximum height for scroll pane
+        scroll.setPreferredSize(new Dimension(scroll.getPreferredSize().width, (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
+
+        scrollPanel.add(scroll, gbc);
+
+        return scrollPanel;
+    }
+
+    private JPanel createScrollPanel(String searchQuery) {
+        JPanel scrollPanel = new JPanel();
+        scrollPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+
+        JScrollPane scroll = new JScrollPane(new JLabel(""),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        try {
+            ArrayList<Product> products = ProductHandler.searchInProducts(Initialize.connection,Initialize.session,searchQuery);
+            JPanel listPanel = new JPanel();
+            listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+
+            for (Product product : products) {
+                listPanel.add(product.createPanel(false));
+                scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            }
+
+        } catch (Exception e){
+            scroll = new JScrollPane(new JLabel(e.getMessage()),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
         }
+
+
+
+        // Setting a maximum height for scroll pane
+        scroll.setPreferredSize(new Dimension(scroll.getPreferredSize().width, (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
+
+        scrollPanel.add(scroll, gbc);
+
+        return scrollPanel;
+    }
+
+    private JPanel createScrollPanel(int sortType, int orderType) {
+        JPanel scrollPanel = new JPanel();
+        scrollPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+
+        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, sortType, orderType);
+
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+
+        for (Product product : products)
+            listPanel.add(product.createPanel(false));
+
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         // Setting a maximum height for scroll pane
@@ -182,7 +257,36 @@ public class AdminProductsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedOption = (String) sortComboBox.getSelectedItem();
-                System.out.println(selectedOption);
+                int sortType = -1;
+                int orderType = -1;
+                switch (selectedOption) {
+                    case "Default (Time Added)" :
+                        sortType = ProductHandler.DEFAULT_ORDER;
+                        orderType = ProductHandler.DESCENDING_ORDER;
+                        break;
+                    case "Rating ascending" :
+                        sortType = ProductHandler.SORT_BY_RATING;
+                        orderType = ProductHandler.ASCENDING_ORDER;
+                        break;
+                    case "Rating descending" :
+                        sortType = ProductHandler.SORT_BY_RATING;
+                        orderType = ProductHandler.DESCENDING_ORDER;
+                        break;
+                    case "Price ascending" :
+                        sortType = ProductHandler.SORT_BY_PRICE;
+                        orderType = ProductHandler.ASCENDING_ORDER;
+                        break;
+                    case "Price descending" :
+                        sortType = ProductHandler.SORT_BY_PRICE;
+                        orderType = ProductHandler.DESCENDING_ORDER;
+                        break;
+                    default:
+                        System.out.println("Something went wrong!");
+                        break;
+                }
+                AdminProductsPanel.this.updateScrollPanel(
+                AdminProductsPanel.this.createScrollPanel(sortType,orderType)
+                );
             }
         });
 
@@ -202,6 +306,14 @@ public class AdminProductsPanel extends JPanel {
         gbc.fill = GridBagConstraints.NONE;
         searchPanel.add(searchButton, gbc);
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdminProductsPanel.this.updateScrollPanel(
+                AdminProductsPanel.this.createScrollPanel(searchTextField.getText())
+                );
+            }
+        });
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -234,4 +346,24 @@ public class AdminProductsPanel extends JPanel {
 
         return optionPanel;
     }
+
+    private void updateScrollPanel (JPanel scrollPanel) {
+        AdminProductsPanel.this.remove(AdminProductsPanel.this.scrollPanel);
+        AdminProductsPanel.this.scrollPanel = scrollPanel;
+
+        // Add the new scroll panel to the ClientProductsPanel
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.8;
+        gbc.weighty = 0.8;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.BOTH;
+        AdminProductsPanel.this.add(AdminProductsPanel.this.scrollPanel, gbc);
+
+        AdminProductsPanel.this.revalidate();
+        AdminProductsPanel.this.repaint();
+        Main.refreshFrame();
+    }
+
 }
