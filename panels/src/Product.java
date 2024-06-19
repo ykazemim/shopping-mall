@@ -236,6 +236,8 @@ public class Product {
         JButton rateButton = new JButton("Rate");
         JButton addToBasketButton = new JButton("Add to basket");
         JButton removeFromBasket = new JButton("Remove from basket");
+        JLabel stockInBasket = new JLabel("<html><font color='blue'>Stock in basket: </font>" + this.stockInBasket + "</html>");
+
 
 
         detailsPanel.add(titleLabel);
@@ -243,22 +245,11 @@ public class Product {
         detailsPanel.add(averageRating);
         detailsPanel.add(ratingCount);
 
-        // Adding image
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        bigPanel.add(imageLabel, gbc);
-
-        // Adding details
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        bigPanel.add(detailsPanel, gbc);
-
 
         JSlider ratingSlider = new JSlider(1, 5, 1);
         ratingSlider.setMajorTickSpacing(1);
         ratingSlider.setPaintLabels(true);
+        ratingSlider.setPreferredSize(new Dimension(100,(int)ratingSlider.getPreferredSize().getHeight()));
 
         rateButton.addActionListener(new ActionListener() {
             @Override
@@ -322,11 +313,30 @@ public class Product {
             addToBasketButton.setEnabled(false);
         }
 
-        detailsPanel.add(ratingSlider);
 
-        JPanel rateButtonPanel = new JPanel();
-        rateButtonPanel.add(rateButton);
-        detailsPanel.add(rateButtonPanel);
+
+        // This panel contains rate slider and rate button
+        JPanel ratePanel = new JPanel(new GridBagLayout());
+
+        gbc.gridx=0;
+        gbc.gridy=0;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.anchor=GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        ratePanel.add(ratingSlider,gbc);
+
+        gbc.gridx++;
+        gbc.gridy=0;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor=GridBagConstraints.LINE_END;
+        ratePanel.add(rateButton,gbc);
+
+        detailsPanel.add(ratePanel);
+        detailsPanel.add(stockInBasket);
+
 
         // These two tempPanels contains just one button each
         JPanel tempPanel1 = new JPanel(new GridBagLayout());
@@ -340,6 +350,19 @@ public class Product {
 
         detailsPanel.add(tempPanel1);
         detailsPanel.add(tempPanel2);
+
+        // Adding image
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        bigPanel.add(imageLabel, gbc);
+
+        // Adding details
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        bigPanel.add(detailsPanel, gbc);
+
 
         return bigPanel;
     }
