@@ -200,7 +200,11 @@ public class ProductHandler {
                         userRating,
                         userStock));
             }
-            Collections.reverse(products);
+
+            if (sortType == DEFAULT_ORDER)
+                if (orderType == DESCENDING_ORDER)
+                    Collections.reverse(products);
+
             return products;
         } catch (SQLException e){
             System.out.println("Something went wrong in fetching products from the database");
