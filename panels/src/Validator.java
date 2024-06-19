@@ -56,9 +56,8 @@ public class Validator {
     public static ArrayList<String> validateAddProductForm(String title, String price, String stock,String pathToImage) {
         ArrayList<String> errors = new ArrayList<>();
 
-        Matcher nameMatcher = namePattern.matcher(title);
-        if (!nameMatcher.matches())
-            errors.add("Name should only contain alphabetic characters and white spaces");
+        if (title.length() > 45 || title.isBlank() || title.isEmpty())
+            errors.add("Length of title should be less than 45 and it should not be empty");
 
         try {
             float priceFloat = Float.parseFloat(price);
