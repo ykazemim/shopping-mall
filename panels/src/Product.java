@@ -115,7 +115,12 @@ public class Product {
         this.availableForClient = availableForClient;
     }
 
-    public JPanel createPanel() {
+    public JPanel createPanel(boolean isAdmin) {
+        return isAdmin ? this.createAdminPanel() : this.createClientPanel();
+    }
+
+    private JPanel createAdminPanel() {
+
         JPanel bigPanel = new JPanel(new GridBagLayout());
         bigPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -147,7 +152,7 @@ public class Product {
         }
 
         // This panel contains product's details
-        JPanel detailsPanel = new JPanel(new GridLayout(5, 3));
+        JPanel detailsPanel = new JPanel(new GridLayout(3, 3));
 
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
         JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
@@ -155,6 +160,79 @@ public class Product {
         JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>" + this.stock + "</html>");
         JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>" + this.availableForClient + "</html>");
+
+
+        detailsPanel.add(titleLabel);
+        detailsPanel.add(priceLabel);
+        detailsPanel.add(averageRating);
+        detailsPanel.add(ratingCount);
+        detailsPanel.add(stockLabel);
+        detailsPanel.add(availableForClientLabel);
+
+        // Adding image
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        bigPanel.add(imageLabel, gbc);
+
+        // Adding details
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        bigPanel.add(detailsPanel, gbc);
+
+        // Adding modify button
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridwidth=2;
+        gbc.weightx=1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        JButton modifyButton = new JButton("Modify");
+        bigPanel.add(modifyButton,gbc);
+        gbc.gridwidth=1;
+
+        return bigPanel;
+    }
+
+    private JPanel createClientPanel() {
+
+        JPanel bigPanel = new JPanel(new GridBagLayout());
+        bigPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+
+        // Resizing the product's image into a standard size
+        // and then adding it to a JLabel and finally adding it
+        // to the panel
+        JLabel imageLabel = new JLabel();
+        imageLabel.setPreferredSize(new Dimension(IMAGE_DIMENSION, IMAGE_DIMENSION));
+        try {
+            ImageIcon imageIcon = this.loadImage();
+            Image resizedImage = imageIcon.getImage();
+
+            int max = Math.max(imageIcon.getIconHeight(), imageIcon.getIconWidth());
+            if (imageIcon.getIconWidth() >= imageIcon.getIconHeight()) {
+                resizedImage = imageIcon.getImage().getScaledInstance(IMAGE_DIMENSION, imageIcon.getIconHeight() * IMAGE_DIMENSION / imageIcon.getIconWidth(), Image.SCALE_SMOOTH);
+            } else if (imageIcon.getIconWidth() < imageIcon.getIconHeight()) {
+                resizedImage = imageIcon.getImage().getScaledInstance(imageIcon.getIconWidth() * IMAGE_DIMENSION / imageIcon.getIconHeight(), IMAGE_DIMENSION, Image.SCALE_SMOOTH);
+            }
+            imageLabel.setIcon(new ImageIcon(resizedImage));
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            imageLabel.setForeground(Color.RED);
+            imageLabel.setText("error");
+        }
+
+        // This panel contains product's details
+        JPanel detailsPanel = new JPanel(new GridLayout(4, 3));
+
+        JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
+        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
+        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         JButton rateButton = new JButton("Rate");
         JButton addToBasketButton = new JButton("Add to basket");
         JButton removeFromBasket = new JButton("Remove from basket");
@@ -164,8 +242,6 @@ public class Product {
         detailsPanel.add(priceLabel);
         detailsPanel.add(averageRating);
         detailsPanel.add(ratingCount);
-        detailsPanel.add(stockLabel);
-        detailsPanel.add(availableForClientLabel);
 
         // Adding image
         gbc.fill = GridBagConstraints.NONE;
@@ -222,7 +298,7 @@ public class Product {
                 if (Product.this.stockInBasket - 1 < Product.this.stock) {
                     addToBasketButton.setEnabled(true);
                 }
-                Main.changePanel(new ProductsPanel());
+                Main.changePanel(new AdminProductsPanel());
                 System.out.println(Product.this.stockInBasket);
             }
         });
