@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Main {
     private static final String username = "root";
-    private static final String password = "67812792";
+    private static final String password = "molioo1298";
     private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
     private static JFrame frame;
 
@@ -24,7 +24,7 @@ public class Main {
 //        AddProductPanel addProductPanel = new AddProductPanel();
 //        frame.add(addProductPanel);
 
-        Initialize.setSession(new Session(Initialize.connection,"cool-client","Moh@mmad1298"));
+        Initialize.setSession(new Session(Initialize.connection,"client","Moh@mmad1298"));
         ProductsPanel productsPanel = new ProductsPanel();
 
         frame.add(productsPanel);
