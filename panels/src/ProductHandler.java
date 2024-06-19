@@ -151,12 +151,15 @@ public class ProductHandler {
                     break;
 
                 default:
-                    productStatement = "SELECT * FROM product;";
+                    if (session.isAdmin())
+                        productStatement = "SELECT * FROM product ;";
+                    else
+                        productStatement = "SELECT * FROM product WHERE available_for_client = ?;";
                     break;
             }
 
             PreparedStatement preparedStatementProduct = connection.prepareStatement(productStatement);
-            if (!session.isAdmin() && (sortType == SORT_BY_PRICE || sortType == SORT_BY_RATING))
+            if (!session.isAdmin())
                 preparedStatementProduct.setBoolean(1, true);
 
             ResultSet productResultSet = preparedStatementProduct.executeQuery();
