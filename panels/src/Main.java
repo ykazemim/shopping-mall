@@ -21,13 +21,13 @@ public class Main {
 //        SignInPanel signInPanel = new SignInPanel();
 //        frame.add(signInPanel);
 
-//        AddProductPanel addProductPanel = new AddProductPanel();
-//        frame.add(addProductPanel);
-
         Initialize.setSession(new Session(Initialize.connection,"client","Moh@mmad1298"));
-        ProductsPanel productsPanel = new ProductsPanel();
 
-        frame.add(productsPanel);
+        ClientProductsPanel cpp = new ClientProductsPanel();
+        AdminProductsPanel app = new AdminProductsPanel();
+
+
+        frame.add(cpp);
 
 
         refreshFrame();
