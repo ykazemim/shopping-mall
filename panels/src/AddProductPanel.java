@@ -201,11 +201,11 @@ public class AddProductPanel extends JPanel implements ActionListener {
             if (errors.isEmpty()){
                 if (file != null){
                     pathToImage = FileCopier.copy(pathToImage);
-                    System.out.println("Image copied");
                 }
 
                 // Add product to the database
                 ProductHandler.addProduct(Initialize.connection, title, Float.parseFloat(price), availableToClient, pathToImage, Integer.parseInt(stock));
+                Main.changePanel(new AdminProductsPanel());
                 errorsLabel.setText("");
             } else {
                 errorsLabel.setText("");
@@ -216,8 +216,10 @@ public class AddProductPanel extends JPanel implements ActionListener {
 
             errorsLabel.setVisible(true);
             Main.refreshFrame();
+
         } else if (src.equals(backButton)) {
-            System.out.println("Back button clicked");
+            Main.changePanel(new AdminProductsPanel());
+
         } else if (src.equals(chooseImageButton)) {
             int option = imageFileChooser.showOpenDialog(this);
             if (option == JFileChooser.APPROVE_OPTION) {
