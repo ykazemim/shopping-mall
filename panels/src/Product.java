@@ -187,13 +187,18 @@ public class Product {
         rateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Rate button clicked");
+                // Make changes to the database
                 ProductHandler.calculateRating(Initialize.connection, Initialize.session, Product.this, ratingSlider.getValue());
+
+                // Update product object
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
                 Product.this.updatePanelFields(ratingCount, averageRating);
+
+                // Update GUI components in the runtime
                 rateButton.setEnabled(false);
                 ratingSlider.setEnabled(false);
+
                 Main.refreshFrame();
             }
         });
@@ -201,15 +206,23 @@ public class Product {
         addToBasketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Product.this.stockInBasket < Product.this.stock) {
+                // Make changes to the database
+                if (Product.this.stockInBasket + 1 <= Product.this.stock) {
                     BasketHandler.addProductToBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
                 }
-                if (Product.this.stockInBasket == Product.this.stock) {
+
+                // Change GUI according to the database result in the runtime
+                if (Product.this.stockInBasket + 1 == Product.this.stock) {
                     addToBasketButton.setEnabled(false);
                 }
+
+                if (!removeFromBasket.isEnabled())
+                    removeFromBasket.setEnabled(true);
+
+                // Update the GUI components and product object
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                Product.this.updatePanelFields(ratingCount, averageRating);
+                // TODO update stock in basket
                 Main.refreshFrame();
                 System.out.println(Product.this.stockInBasket);
             }
@@ -218,12 +231,21 @@ public class Product {
         removeFromBasket.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Make changes to the database
                 BasketHandler.removeProductFromBasket(Initialize.connection, Product.this, Initialize.session.getClientBasket());
+
+                // Change GUI according to the database result in the runtime
                 if (Product.this.stockInBasket - 1 < Product.this.stock) {
                     addToBasketButton.setEnabled(true);
                 }
-                Main.changePanel(new ProductsPanel());
-                System.out.println(Product.this.stockInBasket);
+                if (Product.this.stockInBasket - 1 <= 0)
+                    removeFromBasket.setEnabled(false);
+
+                // Update the GUI components and product object
+                Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
+                Product.this.updateProduct(temp);
+
+                Main.refreshFrame();
             }
         });
 
