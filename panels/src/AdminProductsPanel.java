@@ -61,6 +61,13 @@ public class AdminProductsPanel extends JPanel {
         JButton clientButton = new JButton("Client");
         JButton salesButton = new JButton("Sales");
 
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new AddProductPanel());
+            }
+        });
+
         shopNameLabel.setOpaque(true);
         shopNameLabel.setBackground(Color.ORANGE);
         shopNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
