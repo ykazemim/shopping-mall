@@ -260,7 +260,7 @@ public class Product {
                 // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                Product.this.updatePanelFields(ratingCount, averageRating);
+                Product.this.updatePanelFields(ratingCount, averageRating, stockInBasket);
                 rateButton.setEnabled(false);
                 ratingSlider.setEnabled(false);
 
@@ -287,7 +287,7 @@ public class Product {
                 // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                stockInBasket.setText("<html><font color='blue'>Stock in basket: </font>" + Product.this.stockInBasket + "</html>");
+                Product.this.updatePanelFields(ratingCount, averageRating, stockInBasket);
 
                 Main.refreshFrame();
             }
@@ -307,7 +307,7 @@ public class Product {
                 // Update product object accordingly
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
-                stockInBasket.setText("<html><font color='blue'>Stock in basket: </font>" + Product.this.stockInBasket + "</html>");
+                Product.this.updatePanelFields(ratingCount, averageRating, stockInBasket);
 
                 Main.refreshFrame();
             }
@@ -400,10 +400,10 @@ public class Product {
     }
 
 
-    private void updatePanelFields(JLabel ratingCount, JLabel averageRating) {
+    private void updatePanelFields(JLabel ratingCount, JLabel averageRating, JLabel stockInBasket) {
         ratingCount.setText("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         averageRating.setText("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
-        // TODO add and remove stock in basket
+        stockInBasket.setText("<html><font color='blue'>Stock in basket: </font>" + this.stockInBasket + "</html>");
     }
 
     private ImageIcon loadImage() throws Exception {
