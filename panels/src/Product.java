@@ -119,6 +119,8 @@ public class Product {
         JPanel bigPanel = new JPanel(new GridBagLayout());
         bigPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         gbc.insets = new Insets(5, 5, 5, 5);
 
 
@@ -127,7 +129,6 @@ public class Product {
         // to the panel
         JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension(IMAGE_DIMENSION, IMAGE_DIMENSION));
-        imageLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
         try {
             ImageIcon imageIcon = this.loadImage();
             Image resizedImage = imageIcon.getImage();
@@ -191,6 +192,8 @@ public class Product {
                 Product temp = ProductHandler.fetchProduct(Initialize.connection, Product.this.idProduct, Initialize.session);
                 Product.this.updateProduct(temp);
                 Product.this.updatePanelFields(ratingCount, averageRating);
+                rateButton.setEnabled(false);
+                ratingSlider.setEnabled(false);
                 Main.refreshFrame();
             }
         });
@@ -249,8 +252,18 @@ public class Product {
         rateButtonPanel.add(rateButton);
         detailsPanel.add(rateButtonPanel);
 
-        detailsPanel.add(addToBasketButton);
-        detailsPanel.add(removeFromBasket);
+        // These two tempPanels contains just one button each
+        JPanel tempPanel1 = new JPanel(new GridBagLayout());
+        JPanel tempPanel2 = new JPanel(new GridBagLayout());
+
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        tempPanel1.add(addToBasketButton, gbc);
+        tempPanel2.add(removeFromBasket, gbc);
+
+        detailsPanel.add(tempPanel1);
+        detailsPanel.add(tempPanel2);
 
         return bigPanel;
     }
@@ -279,15 +292,19 @@ public class Product {
         ImageIcon imageIcon;
 
         BufferedImage bufferedImage = null;
-        try {
-            bufferedImage = ImageIO.read(new File(this.pathToImage));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Error: No image input");
-        } catch (IOException e) {
-            throw new IOException("Error: Something went wrong during reading image");
-        } finally {
-            if (bufferedImage == null) {
-                throw new Exception("Error: Something went wrong during reading image");
+
+        if (this.pathToImage == null) bufferedImage = ImageIO.read(Product.class.getResource("default_image.png"));
+        else {
+            try {
+                bufferedImage = ImageIO.read(new File(this.pathToImage));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Error: No image input");
+            } catch (IOException e) {
+                throw new IOException("Error: Something went wrong during reading image");
+            } finally {
+                if (bufferedImage == null) {
+                    throw new Exception("Error: Something went wrong during reading image");
+                }
             }
         }
 
