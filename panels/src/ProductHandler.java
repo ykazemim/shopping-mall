@@ -329,4 +329,23 @@ public class ProductHandler {
         return products;
     }
 
+    public static void modifyProduct(Connection connection, Product product){
+        // Modify product in the database
+        try {
+            String productStatement = "UPDATE product SET title = ?, price = ?, image = ?, stock = ?, available_for_client = ? WHERE idproduct = ?;";
+            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(productStatement);
+            preparedStatement.setString(1, product.getTitle());
+            preparedStatement.setFloat(2, product.getPrice());
+            preparedStatement.setString(3, product.getPathToImage());
+            preparedStatement.setInt(4, product.getStock());
+            preparedStatement.setBoolean(5, product.isAvailableForClient());
+            preparedStatement.setInt(6, product.getIdProduct());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e){
+            System.out.println("Something went wrong in updating product in the database");
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
