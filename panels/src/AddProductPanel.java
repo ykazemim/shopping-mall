@@ -70,8 +70,8 @@ public class AddProductPanel extends JPanel implements ActionListener {
         errorsLabel.setVisible(false);
         imagePathLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         imagePathLabel.setLineWrap(true);
+        imagePathLabel.setEditable(false);
         imagePathLabel.setBackground(null);
-        errorsLabel.setVisible(false);
         imagePathLabel.setVisible(false);
 
         // Allowing only images in file chooser
