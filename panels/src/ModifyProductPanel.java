@@ -240,7 +240,10 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
             Main.refreshFrame();
 
         } else if (src.equals(deleteProductButton)) {
-
+            if (product.getPathToImage() != null) {
+                File file = new File(product.getPathToImage());
+                if (file.exists()) file.delete();
+            }
             ProductHandler.deleteProduct(Initialize.connection, product.getIdProduct());
 
             if (Initialize.session.isAdmin()) Main.changePanel(new AdminProductsPanel());
