@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Main {
     private static final String username = "root";
-    private static final String password = "molioo1298";
+    private static final String password = "67812792";
     private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
     private static JFrame frame;
 
@@ -21,13 +21,16 @@ public class Main {
 //        SignInPanel signInPanel = new SignInPanel();
 //        frame.add(signInPanel);
 
-        Initialize.setSession(new Session(Initialize.connection,"client","Moh@mmad1298"));
+//        AddProductPanel addProductPanel = new aAddProductPanel();
+//        frame.add(addProductPanel);
 
-        ClientProductsPanel cpp = new ClientProductsPanel();
-        AdminProductsPanel app = new AdminProductsPanel();
+        Initialize.setSession(new Session(Initialize.connection,"amir_125","Moli@1299"));
+        AdminProductsPanel adminProductsPanel = new AdminProductsPanel();
+        frame.add(adminProductsPanel);
 
-
-        frame.add(cpp);
+//        Initialize.setSession(new Session(Initialize.connection,"molio_98","Moli@1298"));
+//        ClientProductsPanel clientProductsPanel = new ClientProductsPanel();
+//        frame.add(clientProductsPanel);
 
 
         refreshFrame();
@@ -39,6 +42,7 @@ public class Main {
         frame.pack();
         frame.pack();
         frame.setSize(new Dimension((int) (frame.getSize().width * 1.25), (int) (frame.getSize().height * 1.25)));
+        frame.setLocationRelativeTo(null);
         frame.revalidate();
         frame.repaint();
     }
