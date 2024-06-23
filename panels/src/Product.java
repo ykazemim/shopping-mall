@@ -151,6 +151,10 @@ public class Product {
             imageLabel.setText("error");
         }
 
+
+
+
+
         // This panel contains product's details
         JPanel detailsPanel = new JPanel(new GridLayout(3, 3));
 
@@ -160,6 +164,15 @@ public class Product {
         JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>" + this.stock + "</html>");
         JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>" + this.availableForClient + "</html>");
+        JButton modifyButton = new JButton("Modify");
+
+
+        modifyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new ModifyProductPanel(Product.this));
+            }
+        });
 
 
         detailsPanel.add(titleLabel);
@@ -187,7 +200,6 @@ public class Product {
         gbc.weightx=1;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        JButton modifyButton = new JButton("Modify");
         bigPanel.add(modifyButton,gbc);
         gbc.gridwidth=1;
 
