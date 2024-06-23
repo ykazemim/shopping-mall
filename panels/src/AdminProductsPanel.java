@@ -327,6 +327,13 @@ public class AdminProductsPanel extends JPanel {
             }
         });
 
+        profileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new AdminProfilePanel());
+            }
+        });
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.2;
