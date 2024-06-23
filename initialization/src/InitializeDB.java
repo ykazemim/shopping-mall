@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class InitializeDB {
     private Connection connection = null;
@@ -91,6 +94,30 @@ public class InitializeDB {
                           FOREIGN KEY (`product`) REFERENCES product(`idproduct`) ON DELETE CASCADE);
                        """);
 
+                // Prompting the user to enter the admin credentials
+                ArrayList<String> errors = new ArrayList<>();
+                String adminUsername, adminPassword, adminName, adminPhone;
+                do {
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Enter the admin username: ");
+                    adminUsername = scanner.nextLine();
+                    System.out.println("Enter the admin password: ");
+                    adminPassword = scanner.nextLine();
+                    System.out.println("Enter the admin name: ");
+                    adminName = scanner.nextLine();
+                    System.out.println("Enter the admin phone: ");
+                    adminPhone = scanner.nextLine();
+                    errors = Validator.validateSingUpForm(adminName, adminUsername, adminPassword, adminPhone);
+                    if (!errors.isEmpty()) {
+                        System.out.println("Please fix the following errors:");
+                        for (String error : errors) {
+                            System.out.println(error);
+                        }
+                    }
+                } while (!errors.isEmpty());
+
+                this.createAdmin(adminUsername, adminPassword, adminName, adminPhone);
+
                 System.out.println("All done!");
 
             } catch (SQLException ex){
@@ -101,4 +128,25 @@ public class InitializeDB {
             System.out.println("Connection was not established.");
         }
     }
+
+    public void createAdmin(String username, String password, String name, String phone){
+        if(connection != null){
+            try{
+                String hashedPassword = PasswordHasher.hashPassword(password);
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user (username, password, name, phone, user_type) VALUES (?,?,?,?,ADMIN)");
+                preparedStatement.setString(1,username);
+                preparedStatement.setString(2,hashedPassword);
+                preparedStatement.setString(3,name);
+                preparedStatement.setString(4,phone);
+                preparedStatement.execute();
+                System.out.println("Admin created successfully!");
+            } catch (SQLException ex){
+                System.out.println("Something went wrong in creating the admin:");
+                System.out.println(ex.getMessage());
+            }
+        } else {
+            System.out.println("Connection was not established.");
+        }
+    }
+
 }
