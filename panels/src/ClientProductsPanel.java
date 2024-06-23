@@ -178,7 +178,12 @@ public class ClientProductsPanel extends JPanel {
         JScrollPane scroll = new JScrollPane(new JLabel(""),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         try {
-            ArrayList<Product> products = ProductHandler.searchInProducts(Initialize.connection,Initialize.session,searchQuery);
+            ArrayList<Product> products;
+            if (!searchQuery.isBlank())
+                products =  ProductHandler.searchInProducts(Initialize.connection,Initialize.session,searchQuery);
+            else
+                products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, ProductHandler.DEFAULT_ORDER, ProductHandler.DESCENDING_ORDER);
+
             JPanel listPanel = new JPanel();
             listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
