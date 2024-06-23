@@ -102,9 +102,9 @@ public class AdminProfilePanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src.equals(editButton)) {
-            // TODO
+            Main.changePanel(new AdminEditPanel());
         } else if (src.equals(goToShopButton)) {
-            // TODO
+            Main.changePanel(new AdminProductsPanel());
         }
     }
 }

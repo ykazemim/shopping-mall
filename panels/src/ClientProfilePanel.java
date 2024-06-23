@@ -191,11 +191,11 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
         if (src.equals(addBalanceButton)) {
             // TODO
         } else if (src.equals(editButton)) {
-            // TODO
+            Main.changePanel(new ClientEditPanel());
         } else if (src.equals(basketHistoryButton)) {
             // TODO
         } else if (src.equals(goToShopButton)) {
-            // TODO
+            Main.changePanel(new ClientProductsPanel());
         }
     }
 }
