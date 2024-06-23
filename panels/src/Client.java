@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.*;
+
 public class Client {
     private final int idclient;
     private final int iduser;
@@ -7,7 +10,7 @@ public class Client {
     private String clientPhone;
     private String username;
 
-    public Client(int idclient, int iduser ,String clientAddress, float clientCredit, String clientName, String clientPhone, String username) {
+    public Client(int idclient, int iduser, String clientAddress, float clientCredit, String clientName, String clientPhone, String username) {
         this.idclient = idclient;
         this.iduser = iduser;
         this.clientAddress = clientAddress;
@@ -63,5 +66,40 @@ public class Client {
 
     public void setClientCredit(float clientCredit) {
         this.clientCredit = clientCredit;
+    }
+
+    public JPanel createPanel() {
+        JPanel panel = new JPanel(new GridLayout(5,2));
+        panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
+
+        JLabel fullnameLabel1 = new JLabel("Full Name");
+        JLabel usernameLabel1 = new JLabel("Username");
+        JLabel phoneLabel1 = new JLabel("Phone");
+        JLabel addressLabel1 = new JLabel("Address");
+        JLabel balanceLabel1 = new JLabel("Balance");
+        JLabel fullnameLabel2 = new JLabel(this.getClientName());
+        JLabel usernameLabel2 = new JLabel(this.getUsername());
+        JLabel phoneLabel2 = new JLabel(this.getClientPhone());
+        JLabel addressLabel2 = new JLabel(this.getClientAddress());
+        JLabel balanceLabel2 = new JLabel(String.valueOf(this.getClientCredit()));
+
+        fullnameLabel1.setForeground(Color.BLUE);
+        usernameLabel1.setForeground(Color.BLUE);
+        phoneLabel1.setForeground(Color.BLUE);
+        addressLabel1.setForeground(Color.BLUE);
+        balanceLabel1.setForeground(Color.BLUE);
+
+        panel.add(fullnameLabel1);
+        panel.add(fullnameLabel2);
+        panel.add(usernameLabel1);
+        panel.add(usernameLabel2);
+        panel.add(phoneLabel1);
+        panel.add(phoneLabel2);
+        panel.add(addressLabel1);
+        panel.add(addressLabel2);
+        panel.add(balanceLabel1);
+        panel.add(balanceLabel2);
+
+        return panel;
     }
 }
