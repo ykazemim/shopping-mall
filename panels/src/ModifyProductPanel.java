@@ -37,8 +37,12 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
     private File file;
     private ImageIcon imageIcon;
 
+    private Product product;
+
 
     public ModifyProductPanel(Product product) {
+        this.product = product;
+
         introLabel = new JLabel("Please enter product's new details");
         titleLabel = new JLabel("Title");
         priceLabel = new JLabel("Price");
@@ -205,8 +209,23 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
                 if (file != null) {
                     pathToImage = FileCopier.copy(pathToImage);
                 }
-
                 // TODO
+                // Update product object
+                product.setTitle(title);
+                product.setPrice(Float.parseFloat(price));
+                product.setStock(Integer.parseInt(stock));
+
+                // If file is null, then pathToImage will be null and the image will be deleted
+                if (pathToImage == null) {
+                    File file = new File(product.getPathToImage());
+                    if (file.exists()) file.delete();
+                }
+
+                product.setPathToImage(pathToImage);
+                product.setAvailableForClient(availableToClient);
+
+                ProductHandler.modifyProduct(Initialize.connection, product);
+
                 if (Initialize.session.isAdmin()) Main.changePanel(new AdminProductsPanel());
                 else Main.changePanel(new ClientProductsPanel());
                 errorsLabel.setText("");
@@ -221,7 +240,9 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
             Main.refreshFrame();
 
         } else if (src.equals(deleteProductButton)) {
-            // TODO
+
+            ProductHandler.deleteProduct(Initialize.connection, product.getIdProduct());
+
             if (Initialize.session.isAdmin()) Main.changePanel(new AdminProductsPanel());
             else Main.changePanel(new ClientProductsPanel());
 
