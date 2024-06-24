@@ -68,6 +68,13 @@ public class AdminProductsPanel extends JPanel {
             }
         });
 
+        clientButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new ClientsPanel());
+            }
+        });
+
         shopNameLabel.setOpaque(true);
         shopNameLabel.setBackground(Color.ORANGE);
         shopNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -189,12 +196,12 @@ public class AdminProductsPanel extends JPanel {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
 
-        JScrollPane scroll = new JScrollPane(new JLabel(""),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scroll = new JScrollPane(new JLabel(""), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         try {
             ArrayList<Product> products;
             if (!searchQuery.isBlank())
-                products = ProductHandler.searchInProducts(Initialize.connection,Initialize.session,searchQuery);
+                products = ProductHandler.searchInProducts(Initialize.connection, Initialize.session, searchQuery);
             else
                 products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, ProductHandler.DEFAULT_ORDER, ProductHandler.DESCENDING_ORDER);
 
@@ -206,10 +213,9 @@ public class AdminProductsPanel extends JPanel {
                 scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             }
 
-        } catch (Exception e){
-            scroll = new JScrollPane(new JLabel(e.getMessage()),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+        } catch (Exception e) {
+            scroll = new JScrollPane(new JLabel(e.getMessage()), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         }
-
 
 
         // Setting a maximum height for scroll pane
@@ -256,7 +262,7 @@ public class AdminProductsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.weighty = 0;
 
-        String[] sortOptions = {"Default (Time Added)", "Rating ascending","Rating descending", "Price ascending","Price descending"};
+        String[] sortOptions = {"Default (Time Added)", "Rating ascending", "Rating descending", "Price ascending", "Price descending"};
 
         JLabel sortLabel = new JLabel("Sort by: ");
         JTextField searchTextField = new JTextField();
@@ -272,23 +278,23 @@ public class AdminProductsPanel extends JPanel {
                 int sortType = -1;
                 int orderType = -1;
                 switch (selectedOption) {
-                    case "Default (Time Added)" :
+                    case "Default (Time Added)":
                         sortType = ProductHandler.DEFAULT_ORDER;
                         orderType = ProductHandler.DESCENDING_ORDER;
                         break;
-                    case "Rating ascending" :
+                    case "Rating ascending":
                         sortType = ProductHandler.SORT_BY_RATING;
                         orderType = ProductHandler.ASCENDING_ORDER;
                         break;
-                    case "Rating descending" :
+                    case "Rating descending":
                         sortType = ProductHandler.SORT_BY_RATING;
                         orderType = ProductHandler.DESCENDING_ORDER;
                         break;
-                    case "Price ascending" :
+                    case "Price ascending":
                         sortType = ProductHandler.SORT_BY_PRICE;
                         orderType = ProductHandler.ASCENDING_ORDER;
                         break;
-                    case "Price descending" :
+                    case "Price descending":
                         sortType = ProductHandler.SORT_BY_PRICE;
                         orderType = ProductHandler.DESCENDING_ORDER;
                         break;
@@ -296,9 +302,7 @@ public class AdminProductsPanel extends JPanel {
                         System.out.println("Something went wrong!");
                         break;
                 }
-                AdminProductsPanel.this.updateScrollPanel(
-                AdminProductsPanel.this.createScrollPanel(sortType,orderType)
-                );
+                AdminProductsPanel.this.updateScrollPanel(AdminProductsPanel.this.createScrollPanel(sortType, orderType));
             }
         });
 
@@ -321,9 +325,14 @@ public class AdminProductsPanel extends JPanel {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdminProductsPanel.this.updateScrollPanel(
-                AdminProductsPanel.this.createScrollPanel(searchTextField.getText())
-                );
+                AdminProductsPanel.this.updateScrollPanel(AdminProductsPanel.this.createScrollPanel(searchTextField.getText()));
+            }
+        });
+
+        profileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new AdminProfilePanel());
             }
         });
 
@@ -359,7 +368,7 @@ public class AdminProductsPanel extends JPanel {
         return optionPanel;
     }
 
-    private void updateScrollPanel (JPanel scrollPanel) {
+    private void updateScrollPanel(JPanel scrollPanel) {
         AdminProductsPanel.this.remove(AdminProductsPanel.this.scrollPanel);
         AdminProductsPanel.this.scrollPanel = scrollPanel;
 

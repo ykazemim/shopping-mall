@@ -25,6 +25,7 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
     private final JButton chooseImageButton;
     private final JButton showImageButton;
     private final JButton deleteImageButton;
+    private final JButton backButton;
     private final JTextField titleTextField;
     private final JTextField priceTextField;
     private final JCheckBox availableToClientCheckBox;
@@ -56,6 +57,7 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
         deleteImageButton = new JButton("Delete image");
         modifyButton = new JButton("Modify");
         deleteProductButton = new JButton("Delete");
+        backButton = new JButton("Back");
         titleTextField = new JTextField(product.getTitle());
         priceTextField = new JTextField(String.valueOf(product.getPrice()));
         availableToClientCheckBox = new JCheckBox("", product.isAvailableForClient());
@@ -90,6 +92,7 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
         deleteImageButton.addActionListener(this);
         modifyButton.addActionListener(this);
         deleteProductButton.addActionListener(this);
+        backButton.addActionListener(this);
 
 
         setLayout(new GridBagLayout());
@@ -180,16 +183,35 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
         add(errorsLabel, gbc);
 
 
-        gbc.anchor = GridBagConstraints.CENTER; // set to default
-        gbc.gridy++; // Move to next row
-        gbc.gridx = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        add(deleteProductButton, gbc);
+        // This panel contains deleteProductButton and modifyButton
+        JPanel tempPanel2 = new JPanel(new GridBagLayout());
+        GridBagConstraints tempGbc = new GridBagConstraints();
+        tempGbc.insets=new Insets(0,5,0,5);
 
-        gbc.gridx = 1;
+        tempGbc.gridx = 0;
+        tempGbc.gridy=0;
+        tempGbc.weightx=0;
+        tempGbc.anchor = GridBagConstraints.LINE_START;
+        tempGbc.fill = GridBagConstraints.NONE;
+        tempPanel2.add(deleteProductButton, tempGbc);
+
+        tempGbc.gridx++;
+        tempGbc.weightx=1;
+        tempGbc.anchor = GridBagConstraints.LINE_END;
+        tempGbc.fill = GridBagConstraints.HORIZONTAL;
+        tempPanel2.add(modifyButton, tempGbc);
+
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(modifyButton, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        add(backButton,gbc);
+
+        // Adding tempPanel2
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx++;
+        gbc.gridwidth = 1;
+        add(tempPanel2,gbc);
     }
 
     @Override
