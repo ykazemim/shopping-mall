@@ -282,6 +282,9 @@ public class ModifyProductPanel extends JPanel implements ActionListener {
         } else if (src.equals(deleteImageButton)) {
             file = null;
             this.refreshImagePathLabel();
+        } else if (src.equals(backButton)){
+            if (Initialize.session.isAdmin()) Main.changePanel(new AdminProductsPanel());
+            else Main.changePanel(new ClientProductsPanel());
         }
     }
 

@@ -137,11 +137,17 @@ public class AdminEditPanel extends JPanel implements ActionListener {
             String name = fullnameTextField.getText();
             String phone = phoneTextField.getText();
 
-            // TODO
-            ArrayList<String> errors = new ArrayList<>(); /* = Validator.validateSingUpForm(name, username, password, phone, address); */
+            ArrayList<String> errors = Validator.validateEditAdminProfileForm(name, username, password, phone);
 
             if (errors.isEmpty()) {
-                // TODO
+                try {
+                    User.modifyAdmin(Initialize.session.getIduser(), name, username, password, phone, Initialize.connection);
+                    Initialize.session = new Session(Initialize.connection, username, password);
+                    Main.changePanel(new AdminProfilePanel());
+                    errorsLabel.setText("");
+                } catch (Exception exception) {
+                    errorsLabel.setText(exception.getMessage());
+                }
             } else {
                 errorsLabel.setText("");
                 for (String error : errors) {
