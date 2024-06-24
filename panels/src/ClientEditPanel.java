@@ -156,7 +156,14 @@ public class ClientEditPanel extends JPanel implements ActionListener {
             ArrayList<String> errors = Validator.validateSingUpForm(name, username, password, phone, address);
 
             if (errors.isEmpty()) {
-                // TODO
+                try {
+                    User.modifyClient(Initialize.session.getIduser(), name, username, password, phone, address, Initialize.connection);
+                    Initialize.setSession(new Session(Initialize.connection, username, password));
+                    Main.changePanel(new ClientProfilePanel());
+                    errorsLabel.setText("");
+                } catch (Exception exception) {
+                    errorsLabel.setText(exception.getMessage());
+                }
             } else {
                 errorsLabel.setText("");
                 for (String error : errors) {
