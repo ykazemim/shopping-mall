@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 public class Client {
     private final int idclient;
@@ -18,6 +20,18 @@ public class Client {
         this.clientName = clientName;
         this.clientPhone = clientPhone;
         this.username = username;
+    }
+
+    public static void addBalance(int idclient, float amount, Connection connection) {
+        String query = "UPDATE client SET credit = credit + ? WHERE idclient = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setFloat(1, amount);
+            preparedStatement.setInt(2, idclient);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {

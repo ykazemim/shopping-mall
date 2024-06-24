@@ -59,6 +59,7 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
 
         editButton.addActionListener(this);
         goToShopButton.addActionListener(this);
+        addBalanceButton.addActionListener(this);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -189,7 +190,28 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src.equals(addBalanceButton)) {
-            // TODO
+            try {
+                float amount = Float.parseFloat(addBalanceTextField.getText());
+                if (amount < 0) {
+                    errorsLabel.setText("Amount should be a positive number");
+                    errorsLabel.setVisible(true);
+                } else {
+                    try {
+                        Client.addBalance(Initialize.session.getIdclient(), amount,Initialize.connection);
+                        Initialize.session.setClientCredit(Initialize.session.getClientCredit() + amount);
+                        balanceLabel2.setText(String.valueOf(Initialize.session.getClientCredit()));
+                        addBalanceTextField.setText("");
+                        Main.refreshFrame();
+                        errorsLabel.setText("");
+                    } catch (Exception ex) {
+                        errorsLabel.setText(ex.getMessage());
+                    }
+                }
+            } catch (NumberFormatException ex){
+                errorsLabel.setText(ex.getMessage());
+            }
+
+
         } else if (src.equals(editButton)) {
             Main.changePanel(new ClientEditPanel());
         } else if (src.equals(basketHistoryButton)) {
