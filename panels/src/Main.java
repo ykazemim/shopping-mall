@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class Main {
     private static final String username = "root";
-    private static final String password = "67812792";
+    private static final String password = "molioo1298";
     private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
     private static JFrame frame;
 
@@ -42,7 +42,7 @@ public class Main {
 //        AddProductPanel addProductPanel = new aAddProductPanel();
 //        frame.add(addProductPanel);
 
-        Initialize.setSession(new Session(Initialize.connection, "amir_125", "Moli@1299"));
+        Initialize.setSession(new Session(Initialize.connection, "admin", "Moh@mmad1298"));
         AdminProductsPanel adminProductsPanel = new AdminProductsPanel();
         frame.add(adminProductsPanel);
 

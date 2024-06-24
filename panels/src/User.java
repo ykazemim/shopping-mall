@@ -129,4 +129,40 @@ public class User {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void modifyClient(int userId, String name, String username, String password, String phone, String address, Connection connection) throws Exception {
+        try {
+            // Check if the username is already taken
+            String checkUsernameStatement = "SELECT * FROM User WHERE username = ? and iduser != ?;";
+            PreparedStatement checkUsernamePreparedStatement = connection.prepareStatement(checkUsernameStatement);
+            checkUsernamePreparedStatement.setString(1,username);
+            checkUsernamePreparedStatement.setInt(2,userId);
+            ResultSet resultSet = checkUsernamePreparedStatement.executeQuery();
+            if(resultSet.next())
+                throw new Exception("Username is already taken");
+
+            // Update the user
+            String hashedPassword = PasswordHasher.hashPassword(password);
+            String userStatement = "UPDATE User SET name = ?, password = ?, phone = ?, username = ? WHERE iduser = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(userStatement);
+            preparedStatement.setString(1,name);
+            preparedStatement.setString(2,hashedPassword);
+            preparedStatement.setString(3,phone);
+            preparedStatement.setString(4,username);
+            preparedStatement.setInt(5,userId);
+            preparedStatement.executeUpdate();
+
+            // Update the client
+            String clientStatement = "UPDATE Client SET address = ? WHERE user = ?;";
+            preparedStatement = connection.prepareStatement(clientStatement);
+            preparedStatement.setString(1,address);
+            preparedStatement.setInt(2,userId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e){
+            System.out.println("Something went wrong in modifying client");
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
