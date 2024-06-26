@@ -124,7 +124,7 @@ public class BasketHandler {
                 if (resultSet.getDate("date_proceeded") == null)
                     return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
                 else
-                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
+                    return new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getTimestamp("date_proceeded"), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded"));
             }
         } catch (java.sql.SQLException e){
             System.out.println("Something went wrong in fetching basket from the database");
@@ -146,7 +146,7 @@ public class BasketHandler {
                 if (resultSet.getDate("date_proceeded") == null)
                     baskets.add( new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), null, resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
                 else
-                    baskets.add(new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getDate("date_proceeded").toLocalDate(), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
+                    baskets.add(new Basket(resultSet.getInt("idbasket"), resultSet.getInt("client"), resultSet.getTimestamp("date_proceeded"), resultSet.getFloat("total_price"), resultSet.getBoolean("is_proceeded")));
             }
             return baskets;
         } catch (java.sql.SQLException e){
@@ -194,11 +194,39 @@ public class BasketHandler {
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()){
-                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("product"), session));
+                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("idproduct"), session));
             }
             return products;
         } catch (SQLException e){
             System.out.println("Something went wrong in fetching products from the basket in the database");
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static ArrayList<Basket> fetchProceededBaskets(Connection connection) throws Exception {
+        try {
+            String sqlStatement = "SELECT * FROM basket WHERE is_proceeded = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setBoolean(1,true);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next())
+                throw new Exception("No proceeded baskets in the database");
+            ArrayList<Basket> baskets = new ArrayList<>();
+            do {
+                baskets.add(new Basket(
+                        resultSet.getInt("idbasket"),
+                        resultSet.getInt("client"),
+                        resultSet.getTimestamp("date_proceeded"),
+                        resultSet.getFloat("total_price"),
+                        resultSet.getBoolean("is_proceeded")
+                ));
+            } while (resultSet.next());
+
+            return baskets;
+
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching baskets from the basket table in the database");
             System.out.println(e.getMessage());
         }
         return null;
