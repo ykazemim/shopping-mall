@@ -205,10 +205,12 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
                         errorsLabel.setText("");
                     } catch (Exception ex) {
                         errorsLabel.setText(ex.getMessage());
+                        errorsLabel.setVisible(true);
                     }
                 }
             } catch (NumberFormatException ex){
-                errorsLabel.setText(ex.getMessage());
+                errorsLabel.setText("Amount should be a number");
+                errorsLabel.setVisible(true);
             }
 
 
