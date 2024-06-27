@@ -8,9 +8,11 @@ public class SalesPanel extends JPanel {
     private int basketNumber = 1;
     private float totalSales=0;
     private int totalBaskets=0;
+    private ArrayList<String> errors;
 
     public SalesPanel() {
         this.setLayout(new GridBagLayout());
+        errors = new ArrayList<>();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
@@ -20,14 +22,11 @@ public class SalesPanel extends JPanel {
             Main.changePanel(new AdminProductsPanel());
         });
 
-        ArrayList<Basket> baskets;
+        ArrayList<Basket> baskets = new ArrayList<>();
         try {
             baskets = BasketHandler.fetchProceededBaskets(Initialize.connection);
         } catch (Exception e) {
-            System.out.println("Something went wrong in fetching all proceeded products.");
-            e.printStackTrace();
-            this.removeAll();
-            return;
+            errors.add(e.getMessage());
         }
 
         JPanel scrollPanel = new JPanel();
@@ -36,11 +35,14 @@ public class SalesPanel extends JPanel {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
-        for (Basket basket : baskets) {
-            listPanel.add(createPanelForBasket(basket));
-            totalSales+=basket.getTotal();
-            totalBaskets++;
-        }
+        if (errors.isEmpty())
+            for (Basket basket : baskets) {
+                listPanel.add(createPanelForBasket(basket));
+                totalSales+=basket.getTotal();
+                totalBaskets++;
+            }
+        else
+            listPanel.add(new JLabel("Something went wrong in fetching baskets"));
 
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
