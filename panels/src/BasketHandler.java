@@ -194,7 +194,7 @@ public class BasketHandler {
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()){
-                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("product"), session));
+                products.add(ProductHandler.fetchProduct(connection,resultSet.getInt("idproduct"), session));
             }
             return products;
         } catch (SQLException e){
