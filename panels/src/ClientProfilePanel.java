@@ -188,12 +188,12 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
-
+        errorsLabel.setText("");
         if (src.equals(addBalanceButton)) {
             try {
                 float amount = Float.parseFloat(addBalanceTextField.getText());
                 if (amount < 0) {
-                    errorsLabel.setText("Amount should be a positive number");
+                    errorsLabel.setText( errorsLabel.getText() + '\n' + "Amount should be a positive number");
                     errorsLabel.setVisible(true);
                 } else {
                     try {
@@ -204,11 +204,13 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
                         Main.refreshFrame();
                         errorsLabel.setText("");
                     } catch (Exception ex) {
-                        errorsLabel.setText(ex.getMessage());
+                        errorsLabel.setText( errorsLabel.getText() + '\n' + ex.getMessage());
+                        errorsLabel.setVisible(true);
                     }
                 }
             } catch (NumberFormatException ex){
-                errorsLabel.setText(ex.getMessage());
+                errorsLabel.setText( errorsLabel.getText() + '\n' + "Amount should be a number");
+                errorsLabel.setVisible(true);
             }
 
 
