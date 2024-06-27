@@ -155,8 +155,7 @@ public class SalesPanel extends JPanel {
 
 
         detailsButton.addActionListener(e -> {
-            // TODO
-            System.out.println("detailsButton clicked");
+            Main.changePanel(new BasketDetailsPanel(basket));
         });
 
         gbc.gridx = 0;
