@@ -140,7 +140,7 @@ public class BasketDetailsPanel extends JPanel {
         JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + product.getAverageRating() + "</html>");
         JLabel userRating;
         if (product.getClientRating() != -1)
-            userRating = new JLabel("<html><font color='blue'>User rating rating: </font>" + product.getClientRating() + "</html>");
+            userRating = new JLabel("<html><font color='blue'>User rating: </font>" + product.getClientRating() + "</html>");
         else
             userRating = new JLabel("<html><font color='blue'> User rating: </font>" + "<font color='red'> null </font>" + "</html>");
         JLabel purchasedCountLabel = new JLabel("<html><font color='blue'>Purchased count: </font>" + product.getStockInBasket() + "</html>");
