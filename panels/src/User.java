@@ -153,7 +153,7 @@ public class User {
             preparedStatement.executeUpdate();
 
             // Update the client
-            String clientStatement = "UPDATE Client SET address = ? WHERE user = ?;";
+            String clientStatement = "UPDATE client SET address = ? WHERE user = ?;";
             preparedStatement = connection.prepareStatement(clientStatement);
             preparedStatement.setString(1,address);
             preparedStatement.setInt(2,userId);
@@ -163,6 +163,39 @@ public class User {
             System.out.println("Something went wrong in modifying client");
             System.out.println(e.getMessage());
         }
+    }
+
+    public static Client fetchClientById (Connection connection, int idclient) {
+        try {
+            String clientStatement = "SELECT * FROM Client WHERE idclient = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(clientStatement);
+            preparedStatement.setInt(1,idclient);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            // Fetching the corresponding user
+            String userStatement = "SELECT * FROM User WHERE iduser = ?;";
+            PreparedStatement preparedStatement1 = connection.prepareStatement(userStatement);
+            preparedStatement1.setInt(1,resultSet.getInt("user"));
+            ResultSet resultSet1 = preparedStatement1.executeQuery();
+            resultSet1.next();
+
+            // Returning Client object
+            return new Client(
+                    resultSet.getInt("idclient"),
+                    resultSet.getInt("user"),
+                    resultSet.getString("address"),
+                    resultSet.getFloat("credit"),
+                    resultSet1.getString("name"),
+                    resultSet1.getString("phone"),
+                    resultSet1.getString("username")
+            );
+
+        } catch (SQLException e){
+            System.out.println("Something went wrong in fetching client from database");
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 }
