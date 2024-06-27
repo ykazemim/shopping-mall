@@ -15,14 +15,12 @@ public class BasketDetailsPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        ArrayList<Product> products;
+        ArrayList<Product> products = new ArrayList<>();
+        String error = "";
         try {
-            products = BasketHandler.fetchProductsFromBasket(Initialize.connection, basket, Initialize.session);
+            products = BasketHandler.retrieveProductsFromClientBasket(Initialize.connection, basket);
         } catch (Exception e) {
-            System.out.println("Something went wrong in fetching products from the basket.");
-            e.printStackTrace();
-            this.removeAll();
-            return;
+            error = e.getMessage();
         }
 
 
@@ -32,9 +30,12 @@ public class BasketDetailsPanel extends JPanel {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
-        for (Product product : products) {
-            listPanel.add(createProductPanel(product));
-        }
+        if (error.isBlank())
+            for (Product product : products) {
+                listPanel.add(createProductPanel(product));
+            }
+        else
+            listPanel.add(new JLabel("Something went wrong in fetching products"));
 
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -137,12 +138,17 @@ public class BasketDetailsPanel extends JPanel {
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + product.getTitle() + "</html>");
         JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + product.getPrice() + "</html>");
         JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + product.getAverageRating() + "</html>");
-        // TODO
-        JLabel purchasedCountLabel = new JLabel("<html><font color='blue'>Purchased count: </font>" + product.getStockInBasket() + "\tIT HAS BUG!!!" + "</html>");
+        JLabel userRating;
+        if (product.getClientRating() != -1)
+            userRating = new JLabel("<html><font color='blue'>User rating rating: </font>" + product.getClientRating() + "</html>");
+        else
+            userRating = new JLabel("<html><font color='blue'> User rating: </font>" + "<font color='red'> null </font>" + "</html>");
+        JLabel purchasedCountLabel = new JLabel("<html><font color='blue'>Purchased count: </font>" + product.getStockInBasket() + "</html>");
 
         detailsPanel.add(titleLabel);
         detailsPanel.add(priceLabel);
         detailsPanel.add(averageRating);
+        detailsPanel.add(userRating);
         detailsPanel.add(purchasedCountLabel);
 
         // Adding image
