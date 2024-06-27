@@ -7,14 +7,6 @@ import java.util.ArrayList;
 public class ClientProductsPanel extends JPanel {
     private JPanel scrollPanel;
 
-    public JPanel getScrollPanel() {
-        return scrollPanel;
-    }
-
-    public void setScrollPanel(JPanel scrollPanel) {
-        this.scrollPanel = scrollPanel;
-    }
-
     public ClientProductsPanel() {
         this.setLayout(new GridBagLayout());
 
@@ -44,7 +36,7 @@ public class ClientProductsPanel extends JPanel {
         gbc.weighty = 0.8;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
-        this.scrollPanel = createScrollPanel();
+        this.scrollPanel = createScrollPanel(ProductHandler.DEFAULT_ORDER, ProductHandler.DESCENDING_ORDER);
         this.add(this.scrollPanel, gbc);
 
         gbc.gridx = 1;
@@ -55,6 +47,14 @@ public class ClientProductsPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         this.add(createOptionsPanel(), gbc);
 
+    }
+
+    public JPanel getScrollPanel() {
+        return scrollPanel;
+    }
+
+    public void setScrollPanel(JPanel scrollPanel) {
+        this.scrollPanel = scrollPanel;
     }
 
     private JPanel createUpperLeftPanel() {
@@ -133,36 +133,6 @@ public class ClientProductsPanel extends JPanel {
         return upperRightPanel;
     }
 
-    private JPanel createScrollPanel() {
-        JPanel scrollPanel = new JPanel();
-        scrollPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-
-        ArrayList<Product> products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, ProductHandler.DEFAULT_ORDER, ProductHandler.DESCENDING_ORDER);
-
-        JPanel listPanel = new JPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-
-        for (Product product : products)
-            listPanel.add(product.createPanel(false));
-
-        JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        // Setting a maximum height for scroll pane
-        scroll.setPreferredSize(new Dimension(scroll.getPreferredSize().width, (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
-
-        scrollPanel.add(scroll, gbc);
-
-        return scrollPanel;
-    }
-
     private JPanel createScrollPanel(String searchQuery) {
         JPanel scrollPanel = new JPanel();
         scrollPanel.setLayout(new GridBagLayout());
@@ -175,12 +145,12 @@ public class ClientProductsPanel extends JPanel {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
 
-        JScrollPane scroll = new JScrollPane(new JLabel(""),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scroll = new JScrollPane(new JLabel(""), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         try {
             ArrayList<Product> products;
             if (!searchQuery.isBlank())
-                products =  ProductHandler.searchInProducts(Initialize.connection,Initialize.session,searchQuery);
+                products = ProductHandler.searchInProducts(Initialize.connection, Initialize.session, searchQuery);
             else
                 products = ProductHandler.fetchProducts(Initialize.connection, Initialize.session, ProductHandler.DEFAULT_ORDER, ProductHandler.DESCENDING_ORDER);
 
@@ -188,14 +158,13 @@ public class ClientProductsPanel extends JPanel {
             listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
             for (Product product : products) {
-                listPanel.add(product.createPanel(false));
+                listPanel.add(product.createPanel(Product.CLIENT_MAIN_PANEL));
                 scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             }
 
-        } catch (Exception e){
-            scroll = new JScrollPane(new JLabel(e.getMessage()),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+        } catch (Exception e) {
+            scroll = new JScrollPane(new JLabel(e.getMessage()), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         }
-
 
 
         // Setting a maximum height for scroll pane
@@ -224,7 +193,7 @@ public class ClientProductsPanel extends JPanel {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
 
         for (Product product : products)
-            listPanel.add(product.createPanel(false));
+            listPanel.add(product.createPanel(Product.CLIENT_MAIN_PANEL));
 
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -259,23 +228,23 @@ public class ClientProductsPanel extends JPanel {
                 int sortType = -1;
                 int orderType = -1;
                 switch (selectedOption) {
-                    case "Default (Time Added)" :
+                    case "Default (Time Added)":
                         sortType = ProductHandler.DEFAULT_ORDER;
                         orderType = ProductHandler.DESCENDING_ORDER;
                         break;
-                    case "Rating ascending" :
+                    case "Rating ascending":
                         sortType = ProductHandler.SORT_BY_RATING;
                         orderType = ProductHandler.ASCENDING_ORDER;
                         break;
-                    case "Rating descending" :
+                    case "Rating descending":
                         sortType = ProductHandler.SORT_BY_RATING;
                         orderType = ProductHandler.DESCENDING_ORDER;
                         break;
-                    case "Price ascending" :
+                    case "Price ascending":
                         sortType = ProductHandler.SORT_BY_PRICE;
                         orderType = ProductHandler.ASCENDING_ORDER;
                         break;
-                    case "Price descending" :
+                    case "Price descending":
                         sortType = ProductHandler.SORT_BY_PRICE;
                         orderType = ProductHandler.DESCENDING_ORDER;
                         break;
@@ -283,9 +252,7 @@ public class ClientProductsPanel extends JPanel {
                         System.out.println("Something went wrong!");
                         break;
                 }
-                ClientProductsPanel.this.updateScrollPanel(
-                        ClientProductsPanel.this.createScrollPanel(sortType,orderType)
-                );
+                ClientProductsPanel.this.updateScrollPanel(ClientProductsPanel.this.createScrollPanel(sortType, orderType));
             }
         });
 
@@ -308,9 +275,7 @@ public class ClientProductsPanel extends JPanel {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClientProductsPanel.this.updateScrollPanel(
-                ClientProductsPanel.this.createScrollPanel(searchTextField.getText())
-                );
+                ClientProductsPanel.this.updateScrollPanel(ClientProductsPanel.this.createScrollPanel(searchTextField.getText()));
             }
         });
 
@@ -318,6 +283,13 @@ public class ClientProductsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.changePanel(new ClientProfilePanel());
+            }
+        });
+
+        basketButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new BasketPanel());
             }
         });
 
@@ -359,7 +331,7 @@ public class ClientProductsPanel extends JPanel {
         return optionPanel;
     }
 
-    private void updateScrollPanel (JPanel scrollPanel) {
+    private void updateScrollPanel(JPanel scrollPanel) {
         ClientProductsPanel.this.remove(ClientProductsPanel.this.scrollPanel);
         ClientProductsPanel.this.scrollPanel = scrollPanel;
 
