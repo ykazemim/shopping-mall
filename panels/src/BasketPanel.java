@@ -5,15 +5,16 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class BasketPanel extends JPanel implements ActionListener {
-    JLabel introLabel;
-    JLabel balanceLabel;
-    JLabel totalPriceLabel;
-    JButton profileButton;
-    JButton proceedButton;
-    JButton goToShopButton;
-    Basket basket;
-    JPanel listPanel;
-    ArrayList<Product> products;
+    private final JLabel introLabel;
+    private final JLabel balanceLabel;
+    private final JLabel totalPriceLabel;
+    private final JTextArea errorsLabel;
+    private final JButton profileButton;
+    private final JButton proceedButton;
+    private final JButton goToShopButton;
+    private Basket basket;
+    private JPanel listPanel;
+    private ArrayList<Product> products;
 
     public BasketPanel() {
         this.setLayout(new GridBagLayout());
@@ -22,7 +23,7 @@ public class BasketPanel extends JPanel implements ActionListener {
 
         ArrayList<Basket> baskets = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false);
 
-        basket = baskets.get(0);
+        basket = baskets.getFirst();
         ArrayList<Product> products = BasketHandler.fetchProductsFromBasket(Initialize.connection, basket, Initialize.session);
 
 
@@ -31,6 +32,7 @@ public class BasketPanel extends JPanel implements ActionListener {
         introLabel = new JLabel("Your basket");
         balanceLabel = new JLabel("Balance: " + Initialize.session.getClientCredit());
         totalPriceLabel = new JLabel("Total price: " + basket.getTotal());
+        errorsLabel = new JTextArea();
         profileButton = new JButton("Profile");
         proceedButton = new JButton("Proceed");
         goToShopButton = new JButton("Go to shop");
@@ -40,6 +42,12 @@ public class BasketPanel extends JPanel implements ActionListener {
         introLabel.setOpaque(true);
         introLabel.setBackground(Color.GREEN);
         introLabel.setFont(new Font(introLabel.getFont().getName(), Font.BOLD, introLabel.getFont().getSize() + 3));
+        errorsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        errorsLabel.setLineWrap(true);
+        errorsLabel.setEditable(false);
+        errorsLabel.setBackground(null);
+        errorsLabel.setForeground(Color.RED);
+        errorsLabel.setVisible(false);
         balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
         balanceLabel.setOpaque(true);
         balanceLabel.setBackground(Color.ORANGE);
@@ -81,6 +89,13 @@ public class BasketPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 1;
 
         gbc.gridy++;
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        belowPanel.add(errorsLabel, gbc);
+        gbc.gridwidth = 1;
+
+        gbc.gridy++;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         belowPanel.add(profileButton, gbc);
@@ -119,10 +134,8 @@ public class BasketPanel extends JPanel implements ActionListener {
         ArrayList<Basket> baskets = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false);
         Basket basket = baskets.getFirst();
 
-        if (basket.getTotal() == 0)
-            proceedButton.setEnabled(false);
-        else
-            proceedButton.setEnabled(true);
+        if (basket.getTotal() == 0) proceedButton.setEnabled(false);
+        else proceedButton.setEnabled(true);
         products = BasketHandler.fetchProductsFromBasket(Initialize.connection, basket, Initialize.session);
 
         listPanel = new JPanel();
@@ -145,10 +158,8 @@ public class BasketPanel extends JPanel implements ActionListener {
         basket = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false).getFirst();
         balanceLabel.setText("Balance: " + Initialize.session.getClientCredit());
         totalPriceLabel.setText("Total price: " + basket.getTotal());
-        if (basket.getTotal() == 0)
-            proceedButton.setEnabled(false);
-        else
-            proceedButton.setEnabled(true);
+        if (basket.getTotal() == 0) proceedButton.setEnabled(false);
+        else proceedButton.setEnabled(true);
     }
 
     public void updateListPanel() {
@@ -167,16 +178,17 @@ public class BasketPanel extends JPanel implements ActionListener {
         if (src.equals(profileButton)) {
             Main.changePanel(new ClientProfilePanel());
         } else if (src.equals(proceedButton)) {
-
             try {
                 BasketHandler.checkout(Initialize.connection, basket);
-                // TODO maybe a message dialog
-                System.out.println("Success!");
+                JOptionPane.showMessageDialog(null, "Success!");
                 updateListPanel();
                 updateBelowPanel();
                 Main.changePanel(new ClientProfilePanel());
-            } catch (Exception ex){
-                //TODO
+            } catch (Exception ex) {
+                // TODO
+                errorsLabel.setText("Put some error here");
+                errorsLabel.setVisible(true);
+                Main.refreshFrame();
             }
 
         } else if (src.equals(goToShopButton)) {
