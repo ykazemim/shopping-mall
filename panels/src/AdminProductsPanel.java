@@ -75,6 +75,13 @@ public class AdminProductsPanel extends JPanel {
             }
         });
 
+        salesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changePanel(new SalesPanel());
+            }
+        });
+
         shopNameLabel.setOpaque(true);
         shopNameLabel.setBackground(Color.ORANGE);
         shopNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
