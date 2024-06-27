@@ -1,16 +1,16 @@
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 public class Basket {
     private int idBasket;
     private int client;
-    private LocalDate date;
+    private Timestamp timestamp;
     private float total;
     private boolean isProceeded;
 
-    public Basket(int idBasket, int client, LocalDate date, float total, boolean isProceeded) {
+    public Basket(int idBasket, int client, Timestamp timestamp, float total, boolean isProceeded) {
         this.idBasket = idBasket;
         this.client = client;
-        this.date = date;
+        this.timestamp = timestamp;
         this.total = total;
         this.isProceeded = isProceeded;
     }
@@ -31,12 +31,12 @@ public class Basket {
         this.client = client;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public float getTotal() {
