@@ -58,7 +58,7 @@ public class AdminProductsPanel extends JPanel {
 
         JLabel shopNameLabel = new JLabel("Shopping Mall");
         JButton addButton = new JButton("Add");
-        JButton clientButton = new JButton("Client");
+        JButton clientButton = new JButton("Clients");
         JButton salesButton = new JButton("Sales");
 
         addButton.addActionListener(new ActionListener() {
