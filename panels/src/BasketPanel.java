@@ -183,10 +183,11 @@ public class BasketPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Success!");
                 updateListPanel();
                 updateBelowPanel();
+                errorsLabel.setText("");
+                errorsLabel.setVisible(true);
                 Main.changePanel(new ClientProfilePanel());
             } catch (Exception ex) {
-                // TODO
-                errorsLabel.setText("Put some error here");
+                errorsLabel.setText(ex.getMessage());
                 errorsLabel.setVisible(true);
                 Main.refreshFrame();
             }
