@@ -158,7 +158,16 @@ public class BasketPanel extends JPanel implements ActionListener {
         if (src.equals(profileButton)) {
             Main.changePanel(new ClientProfilePanel());
         } else if (src.equals(proceedButton)) {
-            // TODO
+
+            try {
+                BasketHandler.checkout(Initialize.connection, basket);
+                // TODO maybe a message dialog
+                System.out.println("Success!");
+                Main.changePanel(new ClientProfilePanel());
+            } catch (Exception ex){
+                //TODO
+            }
+
         } else if (src.equals(goToShopButton)) {
             Main.changePanel(new ClientProductsPanel());
         }

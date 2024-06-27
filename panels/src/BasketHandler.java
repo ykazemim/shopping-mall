@@ -96,13 +96,37 @@ public class BasketHandler {
 
     public static void checkout(Connection connection, Basket basket) throws Exception {
         // Checkout the basket
+
+        // Check if client has enough credit
+        if (Initialize.session.getClientCredit() < basket.getTotal())
+            throw new Exception("Not enough credit to proceed the basket");
+
         try {
-            String basketStatement = "UPDATE basket SET is_proceeded = ? date_proceeded = ? WHERE idbasket = ?;";
+            String basketStatement = "UPDATE basket SET is_proceeded = ? , date_proceeded = ? WHERE idbasket = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
             preparedStatement.setBoolean(1, true);
-            preparedStatement.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setInt(3, basket.getIdBasket());
             preparedStatement.executeUpdate();
+
+            // Deduct credit from current client
+            String clientStatement = "UPDATE client SET credit = credit - ? WHERE idclient = ?;";
+            preparedStatement = connection.prepareStatement(clientStatement);
+            preparedStatement.setFloat(1, basket.getTotal());
+            preparedStatement.setInt(2, basket.getClient());
+            preparedStatement.executeUpdate();
+
+            // Update the client's credit on the runtime
+            Initialize.session.setClientCredit(Initialize.session.getClientCredit() - basket.getTotal());
+
+            // Deduct stock quantities from products in basket
+            ArrayList<Product> products = BasketHandler.fetchProductsFromBasket(connection,basket, Initialize.session);
+            for (Product product : products){
+                product.setStock(product.getStock() - product.getStockInBasket());
+                if (product.getStock() == 0)
+                    product.setAvailableForClient(false);
+                ProductHandler.modifyProduct(connection,product);
+            }
 
             // Create a new basket
             basket = createBasket(connection, basket.getClient());
