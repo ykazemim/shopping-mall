@@ -261,4 +261,48 @@ public class BasketHandler {
         return null;
     }
 
+    public static ArrayList<Product> retrieveProductsFromClientBasket(Connection connection, Basket basket) throws Exception {
+        try {
+            String sqlStatement = "SELECT products.*, product_basket.stock FROM products, product_basket WHERE products.idproduct = product_basket.idproduct AND product_basket.idbasket = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1,basket.getIdBasket());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Product> products = new ArrayList<>();
+            while (resultSet.next()){
+                // Fetch client rating for each product if available
+                String ratingStatement = "SELECT * FROM rating WHERE product = ? AND client = ?;";
+                PreparedStatement preparedStatement1 = connection.prepareStatement(ratingStatement);
+                preparedStatement1.setInt(1,resultSet.getInt("idproduct"));
+                preparedStatement1.setInt(2,basket.getClient());
+                ResultSet ratingResultSet = preparedStatement1.executeQuery();
+                int userRating = -1;
+                if (ratingResultSet.next())
+                    userRating = ratingResultSet.getInt("rating");
+
+                products.add(new Product(
+                        resultSet.getInt("idproduct"),
+                        resultSet.getString("title"),
+                        resultSet.getFloat("price"),
+                        resultSet.getString("image"),
+                        resultSet.getInt("products.stock"),
+                        resultSet.getInt("rating_count"),
+                        resultSet.getFloat("average_rating"),
+                        resultSet.getBoolean("available_for_client"),
+                        userRating,
+                        resultSet.getInt("product_basket.stock")
+
+                ));
+            }
+            if (products.isEmpty())
+                throw new Exception("Something unusual happened in retrieving products from the client basket");
+            return products;
+
+        } catch (SQLException e){
+            System.out.println("Something went wrong in retrieving products from the client basket in the database");
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
 }
