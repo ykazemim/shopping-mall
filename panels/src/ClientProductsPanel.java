@@ -91,6 +91,40 @@ public class ClientProductsPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
+        // Get the client's name and username from the session
+        String clientName = Initialize.session.getName();
+        String clientUsername = Initialize.session.getUsername();
+
+        // Create a JLabel to display the welcome message and the client's username
+        JLabel welcomeLabel = new JLabel("Welcome, " + clientName + "!");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setVerticalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font(welcomeLabel.getFont().getName(), Font.BOLD, welcomeLabel.getFont().getSize() + 2));
+
+        JLabel usernameLabel = new JLabel( "Your username is: " + clientUsername);
+        usernameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        usernameLabel.setVerticalAlignment(SwingConstants.CENTER);
+        usernameLabel.setFont(new Font(usernameLabel.getFont().getName(), Font.BOLD, usernameLabel.getFont().getSize() + 2));
+
+
+        // Add the welcomeLabel and usernameLabel to the upperRightPanel
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.BOTH;
+        upperRightPanel.add(welcomeLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.BOTH;
+        upperRightPanel.add(usernameLabel, gbc);
+
+
 
         JLabel userTypeLabel = new JLabel("User type: " + (Initialize.session.isAdmin() ? "admin" : "client"));
         JLabel balanceLabel = new JLabel("Balance: " + String.valueOf(Initialize.session.getClientCredit()));
