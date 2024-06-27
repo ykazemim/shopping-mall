@@ -118,6 +118,11 @@ public class BasketPanel extends JPanel implements ActionListener {
 
         ArrayList<Basket> baskets = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false);
         Basket basket = baskets.getFirst();
+
+        if (basket.getTotal() == 0)
+            proceedButton.setEnabled(false);
+        else
+            proceedButton.setEnabled(true);
         products = BasketHandler.fetchProductsFromBasket(Initialize.connection, basket, Initialize.session);
 
         listPanel = new JPanel();
@@ -140,6 +145,10 @@ public class BasketPanel extends JPanel implements ActionListener {
         basket = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false).getFirst();
         balanceLabel.setText("Balance: " + Initialize.session.getClientCredit());
         totalPriceLabel.setText("Total price: " + basket.getTotal());
+        if (basket.getTotal() == 0)
+            proceedButton.setEnabled(false);
+        else
+            proceedButton.setEnabled(true);
     }
 
     public void updateListPanel() {
@@ -163,6 +172,8 @@ public class BasketPanel extends JPanel implements ActionListener {
                 BasketHandler.checkout(Initialize.connection, basket);
                 // TODO maybe a message dialog
                 System.out.println("Success!");
+                updateListPanel();
+                updateBelowPanel();
                 Main.changePanel(new ClientProfilePanel());
             } catch (Exception ex){
                 //TODO

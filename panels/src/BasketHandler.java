@@ -101,6 +101,10 @@ public class BasketHandler {
         if (Initialize.session.getClientCredit() < basket.getTotal())
             throw new Exception("Not enough credit to proceed the basket");
 
+        // Check basket if is null
+        if (basket.getTotal() == 0f)
+            throw new Exception("Basket is empty");
+
         try {
             String basketStatement = "UPDATE basket SET is_proceeded = ? , date_proceeded = ? WHERE idbasket = ?;";
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(basketStatement);
@@ -130,6 +134,7 @@ public class BasketHandler {
 
             // Create a new basket
             basket = createBasket(connection, basket.getClient());
+            Initialize.session.setClientBasket(basket);
 
         } catch (java.sql.SQLException e){
             System.out.println("Something went wrong in checking out the basket in the database");
