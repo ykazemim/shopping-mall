@@ -29,8 +29,8 @@ public class BasketPanel extends JPanel implements ActionListener {
         JPanel belowPanel = new JPanel(new GridBagLayout());
 
         introLabel = new JLabel("Your basket");
-        balanceLabel = new JLabel("Balance: " + Initialize.session.getClientCredit());
-        totalPriceLabel = new JLabel("Total price: " + basket.getTotal());
+        balanceLabel = new JLabel("Balance: " + Main.decimalFormat.format(Initialize.session.getClientCredit()));
+        totalPriceLabel = new JLabel("Total price: " + Main.decimalFormat.format(basket.getTotal()));
         errorsLabel = new JTextArea();
         profileButton = new JButton("Profile");
         proceedButton = new JButton("Proceed");
@@ -155,8 +155,8 @@ public class BasketPanel extends JPanel implements ActionListener {
 
     public void updateBelowPanel() {
         basket = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false).getFirst();
-        balanceLabel.setText("Balance: " + Initialize.session.getClientCredit());
-        totalPriceLabel.setText("Total price: " + basket.getTotal());
+        balanceLabel.setText("Balance: " + Main.decimalFormat.format(Initialize.session.getClientCredit()));
+        totalPriceLabel.setText("Total price: " + Main.decimalFormat.format(basket.getTotal()));
         if (basket.getTotal() == 0) proceedButton.setEnabled(false);
         else proceedButton.setEnabled(true);
     }
