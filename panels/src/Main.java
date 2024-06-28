@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class Main {
     private static final String username = "root";
-    private static final String password = "molioo1298";
+    private static final String password = "67812792";
     private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
     private static JFrame frame;
 
@@ -24,6 +24,7 @@ public class Main {
         frame = new JFrame("Shopping Mall");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(1, 1));
+        frame.setResizable(false);
 
         // Setting the app's icon
         try {
@@ -33,22 +34,9 @@ public class Main {
             System.out.println("Failed to set the app's icon.");
         }
 
-//        frame.setResizable(false);
 
-
-//        SignInPanel signInPanel = new SignInPanel();
-//        frame.add(signInPanel);
-
-//        AddProductPanel addProductPanel = new aAddProductPanel();
-//        frame.add(addProductPanel);
-
-        Initialize.setSession(new Session(Initialize.connection, "admin", "Moh@mmad1298"));
-        AdminProductsPanel adminProductsPanel = new AdminProductsPanel();
-        frame.add(adminProductsPanel);
-
-//        Initialize.setSession(new Session(Initialize.connection,"molio_98","Moli@1298"));
-//        ClientProductsPanel clientProductsPanel = new ClientProductsPanel();
-//        frame.add(clientProductsPanel);
+        SignInPanel signInPanel = new SignInPanel();
+        frame.add(signInPanel);
 
 
         refreshFrame();
