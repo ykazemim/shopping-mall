@@ -162,8 +162,8 @@ public class Product {
         JPanel detailsPanel = new JPanel(new GridLayout(3, 3));
 
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
-        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
-        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + Main.decimalFormat.format(this.price) + "</html>");
+        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + Main.decimalFormat.format(this.averageRating) + "</html>");
         JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         JLabel stockLabel = new JLabel("<html><font color='blue'>Stock: </font>" + this.stock + "</html>");
         JLabel availableForClientLabel = new JLabel("<html><font color='blue'>Available for client: </font>" + this.availableForClient + "</html>");
@@ -245,8 +245,8 @@ public class Product {
         JPanel detailsPanel = new JPanel(new GridLayout(4, 3));
 
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
-        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
-        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + Main.decimalFormat.format(this.price) + "</html>");
+        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + Main.decimalFormat.format(this.averageRating) + "</html>");
         JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         JButton rateButton = new JButton("Rate");
         JButton addToBasketButton = new JButton("Add to basket");
@@ -432,8 +432,8 @@ public class Product {
         JPanel detailsPanel = new JPanel(new GridLayout(4, 3));
 
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + this.title + "</html>");
-        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + this.price + "</html>");
-        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + Main.decimalFormat.format(this.price) + "</html>");
+        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + Main.decimalFormat.format(this.averageRating) + "</html>");
         JLabel ratingCount = new JLabel("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
         JButton rateButton = new JButton("Rate");
         JButton addToBasketButton = new JButton("Increase count");
@@ -605,8 +605,8 @@ public class Product {
 
 
     private void updatePanelFields(JLabel ratingCount, JLabel averageRating, JLabel stockInBasket) {
-        ratingCount.setText("<html><font color='blue'>Rating count: </font>" + this.ratingCount + "</html>");
-        averageRating.setText("<html><font color='blue'>Average rating: </font>" + this.averageRating + "</html>");
+        ratingCount.setText("<html><font color='blue'>Rating count: </font>" + Main.decimalFormat.format(this.ratingCount) + "</html>");
+        averageRating.setText("<html><font color='blue'>Average rating: </font>" + Main.decimalFormat.format(this.averageRating) + "</html>");
         stockInBasket.setText("<html><font color='blue'>Stock in basket: </font>" + this.stockInBasket + "</html>");
     }
 

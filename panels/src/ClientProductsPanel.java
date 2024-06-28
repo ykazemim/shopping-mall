@@ -127,7 +127,7 @@ public class ClientProductsPanel extends JPanel {
 
 
         JLabel userTypeLabel = new JLabel("User type: " + (Initialize.session.isAdmin() ? "admin" : "client"));
-        JLabel balanceLabel = new JLabel("Balance: " + String.valueOf(Initialize.session.getClientCredit()));
+        JLabel balanceLabel = new JLabel("Balance: " + Main.decimalFormat.format(Initialize.session.getClientCredit()));
         JButton logOutButton = new JButton("Log out");
 
         logOutButton.addActionListener(new ActionListener() {

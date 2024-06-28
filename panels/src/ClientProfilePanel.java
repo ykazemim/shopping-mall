@@ -200,7 +200,7 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
                     try {
                         Client.addBalance(Initialize.session.getIdclient(), amount,Initialize.connection);
                         Initialize.session.setClientCredit(Initialize.session.getClientCredit() + amount);
-                        balanceLabel2.setText(String.valueOf(Initialize.session.getClientCredit()));
+                        balanceLabel2.setText(Main.decimalFormat.format(Initialize.session.getClientCredit()));
                         addBalanceTextField.setText("");
                         Main.refreshFrame();
                         errorsLabel.setText("");

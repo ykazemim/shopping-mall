@@ -71,7 +71,7 @@ public class Basket {
             JLabel totalPriceLabel1 = new JLabel("Total price");
             JLabel usernameLabel2 = new JLabel(User.fetchClientById(Initialize.connection, basket.getClient()).getUsername());
             JLabel dateLabel2 = new JLabel(String.valueOf(basket.getTimestamp()));
-            JLabel totalPriceLabel2 = new JLabel(String.valueOf(basket.getTotal()));
+            JLabel totalPriceLabel2 = new JLabel(Main.decimalFormat.format(basket.getTotal()));
             JButton detailsButton = new JButton("Details");
 
             usernameLabel1.setForeground(Color.BLUE);

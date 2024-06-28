@@ -54,7 +54,7 @@ public class BasketDetailsPanel extends JPanel {
         JLabel totalCostLabel1 = new JLabel("Total cost: ");
         JLabel timeLabel1 = new JLabel("Time: ");
         JLabel usernameLabel1 = new JLabel("Username: ");
-        JLabel totalCostLabel2 = new JLabel(String.valueOf(basket.getTotal()));
+        JLabel totalCostLabel2 = new JLabel(Main.decimalFormat.format(basket.getTotal()));
         JLabel timeLabel2 = new JLabel(String.valueOf(basket.getTimestamp()));
         JLabel usernameLabel2 = new JLabel(User.fetchClientById(Initialize.connection, basket.getClient()).getUsername());
         JButton backButton = new JButton("Back");
@@ -138,8 +138,8 @@ public class BasketDetailsPanel extends JPanel {
         JPanel detailsPanel = new JPanel(new GridLayout(4, 1));
 
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + product.getTitle() + "</html>");
-        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + product.getPrice() + "</html>");
-        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + product.getAverageRating() + "</html>");
+        JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + Main.decimalFormat.format(product.getPrice()) + "</html>");
+        JLabel averageRating = new JLabel("<html><font color='blue'>Average rating: </font>" + Main.decimalFormat.format(product.getAverageRating()) + "</html>");
         JLabel userRating;
         if (product.getClientRating() != -1)
             userRating = new JLabel("<html><font color='blue'>User rating: </font>" + product.getClientRating() + "</html>");

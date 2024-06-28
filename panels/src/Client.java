@@ -83,7 +83,7 @@ public class Client {
     }
 
     public JPanel createPanel() {
-        JPanel panel = new JPanel(new GridLayout(5,2));
+        JPanel panel = new JPanel(new GridLayout(5, 2));
         panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 3));
 
         JLabel fullnameLabel1 = new JLabel("Full Name");
@@ -95,7 +95,7 @@ public class Client {
         JLabel usernameLabel2 = new JLabel(this.getUsername());
         JLabel phoneLabel2 = new JLabel(this.getClientPhone());
         JLabel addressLabel2 = new JLabel(this.getClientAddress());
-        JLabel balanceLabel2 = new JLabel(String.valueOf(this.getClientCredit()));
+        JLabel balanceLabel2 = new JLabel(Main.decimalFormat.format(this.getClientCredit()));
 
         fullnameLabel1.setForeground(Color.BLUE);
         usernameLabel1.setForeground(Color.BLUE);

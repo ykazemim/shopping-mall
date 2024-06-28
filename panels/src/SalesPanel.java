@@ -86,7 +86,7 @@ public class SalesPanel extends JPanel {
         JLabel totalBasketsLabel1 = new JLabel("Total baskets: ");
         JLabel totalBasketsLabel2 = new JLabel(String.valueOf(totalBaskets));
         JLabel totalSalesLabel1 = new JLabel("Total sales: ");
-        JLabel totalSalesLabel2 = new JLabel(String.valueOf(totalSales));
+        JLabel totalSalesLabel2 = new JLabel(Main.decimalFormat.format(totalSales));
 
         introLabel.setPreferredSize(new Dimension(400, 30));
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -145,7 +145,7 @@ public class SalesPanel extends JPanel {
         JLabel totalPriceLabel1 = new JLabel("Total price");
         JLabel usernameLabel2 = new JLabel(User.fetchClientById(Initialize.connection, basket.getClient()).getUsername());
         JLabel dateLabel2 = new JLabel(String.valueOf(basket.getTimestamp()));
-        JLabel totalPriceLabel2 = new JLabel(String.valueOf(basket.getTotal()));
+        JLabel totalPriceLabel2 = new JLabel(Main.decimalFormat.format(basket.getTotal()));
         JButton detailsButton = new JButton("Details");
 
         usernameLabel1.setForeground(Color.BLUE);

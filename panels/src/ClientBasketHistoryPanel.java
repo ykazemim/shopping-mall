@@ -79,7 +79,7 @@ public class ClientBasketHistoryPanel extends JPanel {
 
         JLabel introLabel = new JLabel("All proceeded baskets");
         JLabel totalBasketsLabel1 = new JLabel("Total baskets: ");
-        JLabel totalBasketsLabel2 = new JLabel(String.valueOf(totalBaskets));
+        JLabel totalBasketsLabel2 = new JLabel(Main.decimalFormat.format(totalBaskets));
         JLabel totalSpentLabel1 = new JLabel("Total spent: ");
         JLabel totalSpentLabel2 = new JLabel(String.valueOf(totalSpent));
 

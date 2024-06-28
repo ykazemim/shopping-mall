@@ -24,7 +24,6 @@ public class BasketPanel extends JPanel implements ActionListener {
         ArrayList<Basket> baskets = BasketHandler.fetchBasketFromClient(Initialize.connection, Initialize.session.getIdclient(), false);
 
         basket = baskets.getFirst();
-        ArrayList<Product> products = BasketHandler.fetchProductsFromBasket(Initialize.connection, basket, Initialize.session);
 
 
         JPanel belowPanel = new JPanel(new GridBagLayout());

@@ -8,10 +8,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
+    public static final DecimalFormat decimalFormat = new DecimalFormat("0.###");
     private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
     private static JFrame frame;
 
