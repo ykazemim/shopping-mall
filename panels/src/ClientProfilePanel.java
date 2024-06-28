@@ -60,6 +60,7 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
         editButton.addActionListener(this);
         goToShopButton.addActionListener(this);
         addBalanceButton.addActionListener(this);
+        basketHistoryButton.addActionListener(this);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -217,7 +218,7 @@ public class ClientProfilePanel extends JPanel implements ActionListener {
         } else if (src.equals(editButton)) {
             Main.changePanel(new ClientEditPanel());
         } else if (src.equals(basketHistoryButton)) {
-            // TODO
+            Main.changePanel(new ClientBasketHistoryPanel());
         } else if (src.equals(goToShopButton)) {
             Main.changePanel(new ClientProductsPanel());
         }

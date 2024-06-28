@@ -68,11 +68,13 @@ public class BasketDetailsPanel extends JPanel {
         usernameLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
 
         backButton.addActionListener(e -> {
-            Main.changePanel(new SalesPanel());
+            if (Initialize.session.isAdmin()) Main.changePanel(new SalesPanel());
+            else Main.changePanel(new ClientBasketHistoryPanel());
         });
 
         goToShopButton.addActionListener(e -> {
-            Main.changePanel(new AdminProductsPanel());
+            if (Initialize.session.isAdmin()) Main.changePanel(new AdminProductsPanel());
+            else Main.changePanel(new ClientProductsPanel());
         });
 
         belowPanel.add(usernameLabel1);

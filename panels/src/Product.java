@@ -416,7 +416,6 @@ public class Product {
             ImageIcon imageIcon = this.loadImage();
             Image resizedImage = imageIcon.getImage();
 
-            int max = Math.max(imageIcon.getIconHeight(), imageIcon.getIconWidth());
             if (imageIcon.getIconWidth() >= imageIcon.getIconHeight()) {
                 resizedImage = imageIcon.getImage().getScaledInstance(IMAGE_DIMENSION, imageIcon.getIconHeight() * IMAGE_DIMENSION / imageIcon.getIconWidth(), Image.SCALE_SMOOTH);
             } else if (imageIcon.getIconWidth() < imageIcon.getIconHeight()) {
