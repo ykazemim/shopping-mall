@@ -133,7 +133,7 @@ public class InitializeDB {
         if(connection != null){
             try{
                 String hashedPassword = PasswordHasher.hashPassword(password);
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user (username, password, name, phone, user_type) VALUES (?,?,?,?,ADMIN)");
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO mall.user (username, password, name, phone, user_type) VALUES (?,?,?,?,ADMIN)");
                 preparedStatement.setString(1,username);
                 preparedStatement.setString(2,hashedPassword);
                 preparedStatement.setString(3,name);
