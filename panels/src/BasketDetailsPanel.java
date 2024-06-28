@@ -135,7 +135,7 @@ public class BasketDetailsPanel extends JPanel {
 
 
         // This panel contains product's details
-        JPanel detailsPanel = new JPanel(new GridLayout(4, 1));
+        JPanel detailsPanel = new JPanel(new GridLayout(5, 1));
 
         JLabel titleLabel = new JLabel("<html><font color='blue'>Title: </font>" + product.getTitle() + "</html>");
         JLabel priceLabel = new JLabel("<html><font color='blue'>Price: </font>" + Main.decimalFormat.format(product.getPrice()) + "</html>");
