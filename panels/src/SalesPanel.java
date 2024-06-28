@@ -42,7 +42,7 @@ public class SalesPanel extends JPanel {
                 totalBaskets++;
             }
         else
-            listPanel.add(new JLabel("Something went wrong in fetching baskets"));
+            listPanel.add(new JLabel("Something went wrong in fetching baskets or sales maybe empty"));
 
         JScrollPane scroll = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 

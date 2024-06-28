@@ -263,7 +263,7 @@ public class BasketHandler {
 
     public static ArrayList<Product> retrieveProductsFromClientBasket(Connection connection, Basket basket) throws Exception {
         try {
-            String sqlStatement = "SELECT products.*, product_basket.stock FROM products, product_basket WHERE products.idproduct = product_basket.idproduct AND product_basket.idbasket = ?;";
+            String sqlStatement = "SELECT product.*, product_basket.stock FROM product, product_basket WHERE product.idproduct = product_basket.idproduct AND product_basket.idbasket = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
             preparedStatement.setInt(1,basket.getIdBasket());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -284,7 +284,7 @@ public class BasketHandler {
                         resultSet.getString("title"),
                         resultSet.getFloat("price"),
                         resultSet.getString("image"),
-                        resultSet.getInt("products.stock"),
+                        resultSet.getInt("product.stock"),
                         resultSet.getInt("rating_count"),
                         resultSet.getFloat("average_rating"),
                         resultSet.getBoolean("available_for_client"),
