@@ -9,17 +9,34 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Main {
-    private static final String username = "root";
-    private static final String password = "67812792";
     private static final String dbURL = "jdbc:mysql://localhost:3306/mall";
     private static JFrame frame;
 
     public static void main(String[] args) throws Exception {
 
-        // Create a connection to sql server
-        new Initialize(dbURL, username, password);
+        Scanner scanner = new Scanner(System.in);
+        String username, password;
+        System.out.println("Please enter database username and password.");
+        while (true) {
+            try {
+                System.out.print("Username: ");
+                username = scanner.nextLine();
+                System.out.print("Password: ");
+                password = scanner.nextLine();
+
+                // Create a connection to sql server
+                new Initialize(dbURL, username, password);
+                break;
+            } catch (Exception e) {
+                System.out.println("Failed to log in. Try again.");
+                System.out.println("------------------------------------------");
+                // TODO: Maybe log e.getMessage()
+            }
+        }
+        scanner.close();
 
         frame = new JFrame("Shopping Mall");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
