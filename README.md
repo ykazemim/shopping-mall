@@ -17,7 +17,7 @@ The project is divided into two main modules:
 - An IDE such as IntelliJ IDEA or Eclipse
 
 ### Dependencies
-- mysql-connector-j-8.4.0.jar
+- mysql-connector-j-8.4.0.jar (or higher versions)
 
 ### Installation
 
@@ -27,16 +27,66 @@ The project is divided into two main modules:
 git clone https://github.com/ykazemim/shopping-mall.git
 ```
 
-2. TODO
+2. Change directory to the repository:
+```sh
+cd shopping-mall
+```
+3. You can either compile the codes using IDEs like IntelliJ or you can just use java compiler:
+	- In IntelliJ just make sure to include the [dependency](https://github.com/ykazemim/shopping-mall?tab=readme-ov-file#dependencies)  and just build the program.
+	- Using javac you should compile it with its dependecy:
+   (in Unix make sure to replace ";" with ":")
+	```sh
+	javac -cp ".;path\to\dependency.jar" <all-java-files-in-the-directory>
+	```
 
 ### Running the Application
 
-TODO
+ - Using JAR releases:
+
+	 You can easily [get the releases](https://github.com/ykazemim/shopping-mall/releases) and run each JAR files like this:
+
+	 ```sh
+	 java -jar path\to\app.jar
+	 ```
+- Running compiled java classes:
+
+	After you compiled the source codes as mentioned above, you can run the codes like this:
+
+	(Windows)
+
+	```sh
+	java -cp ".;path\to\dependecy.jar" Main
+	```
+ 
+	(Unix)
+
+	```sh
+	java -cp ".:path/to/dependecy.jar" Main
+	```
 
 ### Initialization
 
-TODO
+When running the application on your system for the very first time,  the application doesn't have a database schema to work with, so you need to first run the Initialization application to make a database schema and an admin user on SQL server.
+After you made sure that your SQL (in this case MySQL) server is up and running and listening on default port (3306) then run the Initialization application with or without database credentials flags:
 
+ - Using JAR:
+
+ ```sh
+ java -jar initialization.jar <username> <password>
+ ```
+ - Running the compiled code:
+
+ (Windows)
+ 
+ ```sh
+ java -cp ".;path/to/dependecy.jar" Main <username> <password>
+ ```
+
+(Unix)
+
+ ```sh
+ java -cp ".:path/to/dependecy.jar" Main <username> <password>
+ ```
 ## Usage
 
 ### Admin Functionalities
