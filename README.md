@@ -122,7 +122,7 @@ The application is designed with a focus on user-friendliness and clean design. 
 
 ## Contributors
 
-- [Saleh](https://github.com/MKmasterg)
+- [MKmasterg (Saleh)](https://github.com/MKmasterg)
 - [Younes](https://github.com/ykazemim)
 
 ## Screenshots
